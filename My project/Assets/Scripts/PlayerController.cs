@@ -5,6 +5,10 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    private Transform respawnLocation;
+    public float invicibleTime = 1.5f;
+    bool isInvicible;
+    float invicibleTimer;
     Animator animator;
     Vector2 movementInput;
     Vector2 lookDirection = new Vector2(0,-1);
@@ -25,6 +29,15 @@ public class PlayerController : MonoBehaviour
         inputActions.Player.Move.performed += OnMove;
         inputActions.Player.Move.canceled += OnMove;
     }
+    void Update()
+    {
+        if (isInvicible)
+        {
+            invicibleTimer -= Time.deltaTime;
+            if (invicibleTimer < 0)
+                isInvicible = false;
+        }
+    }
     private void FixedUpdate()
     {
         if (movementInput.magnitude > 0.01)
@@ -42,6 +55,23 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat("LookX", lookDirection.x);
         animator.SetFloat("LookY", lookDirection.y);
         animator.SetFloat("Speed", move.magnitude);
+    }
+    public void changeHealth(int amount)
+    {
+        if (amount < 0)
+        {
+            Debug.Log(currentHealth);
+            animator.SetTrigger("Hit");
+            if (isInvicible) return;
+            isInvicible = true;
+            invicibleTimer = invicibleTime;
+        }
+        currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+        // if (currentHealth == 0)
+        //     Respawn();
+
+        //Set health bar UI
+        healthBar.setHealth(currentHealth);
     }
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -72,5 +102,10 @@ public class PlayerController : MonoBehaviour
     {
         data.health = this.currentHealth;
         data.playerPostion = this.transform.position;
+    }
+    void Respawn()
+    {
+        changeHealth(maxHealth);
+        transform.position = respawnLocation.position;
     }
 }

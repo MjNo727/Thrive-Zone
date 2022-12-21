@@ -1,5 +1,5 @@
 {
-    "name": "PlayerInputACtions",
+    "name": "PlayerInputActions",
     "maps": [
         {
             "name": "Player",
@@ -152,6 +152,34 @@
                     "processors": "",
                     "groups": "",
                     "action": "Roll",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "UI",
+            "id": "e4e0dd59-e1a3-455a-b0c9-22fdc0382323",
+            "actions": [
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "045b2b61-74a3-4b9c-8c1d-2d28970a8b2f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "e570a789-1db2-4290-9d8e-a6de2f9bde9f",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

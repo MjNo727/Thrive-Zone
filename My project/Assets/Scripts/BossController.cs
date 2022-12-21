@@ -18,9 +18,16 @@ public class BossController : MonoBehaviour
     private bool inChaseRange;
     private bool isInAttackRange;
 
-    private void Start(){
+    private void Start()
+    {
         rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
-        target = GameObject.FindWithTag("Player").transform;
+    }
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        PlayerController player = other.gameObject.GetComponent<PlayerController>();
+        if (player != null) // collide with player
+        {
+            player.changeHealth(-1);
+        }
     }
 }
