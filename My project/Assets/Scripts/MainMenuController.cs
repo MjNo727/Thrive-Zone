@@ -9,6 +9,7 @@ public class MainMenuController : MonoBehaviour
     [SerializeField] private Button newGameBtn;
     [SerializeField] private Button loadGameBtn;
     private void Start(){
+        AudioManager.instance.PlayMusic("MainMenuTheme");
         if (!PlayerPrefs.HasKey("musicVolume"))
         {
             PlayerPrefs.SetFloat("musicVolume", 1);

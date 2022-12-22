@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IDataPersistance
 {
+    [SerializeField]
     private Transform respawnLocation;
     public float invicibleTime = 1.5f;
     bool isInvicible;
@@ -23,6 +24,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        AudioManager.instance.PlayMusic("Theme");
         inputActions = new PlayerInputActions();
         inputActions.Player.Enable();
 
@@ -61,14 +63,17 @@ public class PlayerController : MonoBehaviour
         if (amount < 0)
         {
             Debug.Log(currentHealth);
+
+            AudioManager.instance.PlaySFX("Hit");
             animator.SetTrigger("Hit");
+
             if (isInvicible) return;
             isInvicible = true;
             invicibleTimer = invicibleTime;
         }
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
-        // if (currentHealth == 0)
-        //     Respawn();
+        if (currentHealth == 0)
+            Respawn();
 
         //Set health bar UI
         healthBar.setHealth(currentHealth);

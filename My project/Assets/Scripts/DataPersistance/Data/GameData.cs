@@ -8,7 +8,7 @@ public class GameData
 {
     public int health;
     public Vector2 playerPostion;
-
+    public Vector2 bossPosition;
     public GameData()
     {
         this.health = 10;
