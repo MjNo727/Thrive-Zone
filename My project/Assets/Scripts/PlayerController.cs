@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour, IDataPersistance
     float invicibleTimer;
     Animator animator;
     Vector2 movementInput;
-    Vector2 lookDirection = new Vector2(0,-1);
+    Vector2 lookDirection = new Vector2(0, -1);
     Rigidbody2D rb;
     public int maxHealth = 10;
     public int currentHealth;

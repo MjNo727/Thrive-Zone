@@ -25,7 +25,6 @@ public class BossController : MonoBehaviour
     }
     void OnCollisionEnter2D(Collision2D other)
     {
-        Debug.Log("Collide with player");
         PlayerController player = other.gameObject.GetComponent<PlayerController>();
         if (player != null) // collide with player
         {
@@ -58,7 +57,6 @@ public class BossController : MonoBehaviour
         dir.Normalize();
         
         movement = dir;
-        Debug.Log(movement);
     }
 
     private void FixedUpdate()
