@@ -22,7 +22,7 @@ public class MonsterSpawner : MonoBehaviour
             randomSpawnPoint = Random.Range(0, spawnPoints.Length);
             randomMonster = Random.Range(0, monsters.Length);
             GameObject instantiatedObject = Instantiate(monsters[randomMonster], spawnPoints[randomSpawnPoint].position, Quaternion.identity);
-            instantiatedObject.transform.localScale = new Vector3(2f, 2f, 0f);
+            instantiatedObject.transform.localScale = new Vector3(10f, 10f, 0f);
             // Instantiate(monsters[randomMonster], spawnPoints[randomSpawnPoint].position, Quaternion.identity);
         }
     }
