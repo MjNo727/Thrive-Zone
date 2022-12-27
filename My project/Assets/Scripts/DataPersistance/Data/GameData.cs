@@ -6,12 +6,11 @@ using UnityEngine.SceneManagement;
 [System.Serializable]
 public class GameData
 {
-    public int health;
+    public float health;
     public Vector2 playerPostion;
-    public Vector2 bossPosition;
     public GameData()
     {
-        this.health = 10;
+        this.health = 100f;
         playerPostion = Vector2.zero;
     }
 }

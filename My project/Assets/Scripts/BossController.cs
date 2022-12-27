@@ -1,97 +1,135 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
+using Pathfinding;
 public class BossController : MonoBehaviour
 {
-    // public GameObject player;
-    private Rigidbody2D rb;
+    public EnemyHealthbar healthbar;
+    public float maxHealth = 100f;
+    public float currentHealth;
+    public float moveSpeed;
+    Transform player;
+    public Transform gunPoint;
+    public Transform gun;
     private Animator animator;
-    public bool flip;
-    public float speed;
-    public float checkRadius, meleeAttackRadius;
-    // rangedAttackRadius;
-    public LayerMask PlayerLayer;
-    public Transform target;
-    private Vector2 movement;
-    public Vector3 dir;
-    private bool isInChaseRange, isInMeleeAttackRange, isInRangedAttackRange;
+    public GameObject BulletProjectile;
+    public float followPlayerRange;
+    private bool inRange;
+    public float attackRange;
+    public float flashDuration;
+    public int numOfFlashes;
+    public SpriteRenderer sr;
+    public Color flashColor;
+    public float startTimeBetweenShots;
+    private float timeBetweenShots;
 
-    private void Start()
+    void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        currentHealth = maxHealth;
+        healthbar.SetHealth(currentHealth, maxHealth);
+        player = GameObject.FindWithTag("Player").transform;
         animator = GetComponent<Animator>();
-        target = GameObject.FindWithTag("Player").transform;
     }
+    void Update()
+    {
+        Vector3 scale = transform.localScale;
+        Vector3 difference = player.position - gun.transform.position;
+        float RotZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
+        gun.transform.rotation = Quaternion.Euler(0f, 0f, RotZ);
+
+        if (player.transform.position.x > transform.position.x)
+        {
+            scale.x = Mathf.Abs(scale.x) * 1;
+        }
+        else
+        {
+            scale.x = Mathf.Abs(scale.x) * -1;
+        }
+        transform.localScale = scale;
+
+        if (Vector2.Distance(transform.position, player.position) <= followPlayerRange && Vector2.Distance(transform.position, player.position) > attackRange)
+        {
+            inRange = true;
+            animator.SetBool("isInCheckRange", true);
+        }
+        else
+        {
+            inRange = false;
+            animator.SetBool("isInCheckRange", false);
+        }
+
+        if (Vector2.Distance(transform.position, player.position) <= attackRange)
+        {
+            if (timeBetweenShots <= 0)
+            {
+                Instantiate(BulletProjectile, gunPoint.position, gunPoint.transform.rotation);
+                timeBetweenShots = startTimeBetweenShots;
+            }
+            else
+            {
+                timeBetweenShots -= Time.deltaTime;
+            }
+        }
+    }
+
+    void FixedUpdate()
+    {
+        if (inRange)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, player.position, moveSpeed * Time.deltaTime);
+        }
+    }
+
+    public void takeDamage(float damage)
+    {
+        currentHealth -= damage;
+        healthbar.SetHealth(currentHealth, maxHealth);
+
+        animator.SetTrigger("Hit");
+        StartCoroutine(FlashCo());
+        if (currentHealth == 0)
+        {
+            Dead();
+        }
+    }
+
+    void Dead()
+    {
+        // Die animation
+        animator.SetBool("isDead", true);
+        // Disable enemy
+        GetComponent<Collider2D>().enabled = false;
+        this.enabled = false;
+    }
+
+    // For seeing range in scene
+    void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position, followPlayerRange);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
+    }
+
     void OnCollisionEnter2D(Collision2D other)
     {
         PlayerController player = other.gameObject.GetComponent<PlayerController>();
         if (player != null) // collide with player
         {
-            player.changeHealth(-1);
+            player.Hurt(5);
         }
     }
 
-    private void Update()
+    private IEnumerator FlashCo()
     {
-        // Vector3 scale = transform.localScale;
-        // if (player.transform.position.x > transform.position.x)
-        // {
-        //     scale.x = Mathf.Abs(scale.x) * -1 * (flip ? -1 : 1);
-        //     transform.Translate(speed * Time.deltaTime, 0, 0);
-        // }
-        // else
-        // {
-        //     scale.x = Mathf.Abs(scale.x) * (flip ? -1 : 1);
-        //     transform.Translate(speed * Time.deltaTime * -1, 0, 0);
-        // }
-        // transform.localScale = scale;
-
-        animator.SetBool("isInCheckRange", isInChaseRange);
-        isInChaseRange = Physics2D.OverlapCircle(transform.position, checkRadius, PlayerLayer);
-        isInMeleeAttackRange = Physics2D.OverlapCircle(transform.position, meleeAttackRadius, PlayerLayer);
-        // isInRangedAttackRange = Physics2D.OverlapCircle(transform.position, rangedAttackRadius, PlayerLayer);
-
-        dir = target.position - transform.position;
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        dir.Normalize();
-        
-        movement = dir;
-    }
-
-    private void FixedUpdate()
-    {
-        if (isInChaseRange && !isInMeleeAttackRange)
+        int temp = 0;
+        while (temp < numOfFlashes)
         {
-            MoveEnemy(movement);
+            sr.color = flashColor;
+            yield return new WaitForSeconds(flashDuration);
+            sr.color = Color.white;
+            yield return new WaitForSeconds(flashDuration);
+            temp++;
         }
-
-        if (isInMeleeAttackRange)
-        {
-            rb.velocity = Vector2.zero;
-        }
-        // if (isInRangedAttackRange)
-        // {
-        //     rb.velocity = Vector2.zero;
-        // }
-    }
-
-    private void MoveEnemy(Vector2 dir)
-    {
-        // Y boundaries
-        if(transform.position.y >= 13.18f){
-            transform.position = new Vector2(transform.position.x, 13.18f);
-        }
-        else if(transform.position.y <= 0f){
-            transform.position = new Vector2(transform.position.x, 0f);
-        }
-        // X boundaries
-        if(transform.position.x >= 61.55f){
-            transform.position = new Vector2(61.55f, transform.position.y);
-        }
-        else if(transform.position.x <= 27.66f){
-            transform.position = new Vector2(27.66f, transform.position.y);
-        }
-        rb.MovePosition((Vector2)transform.position + (dir * speed * Time.deltaTime));
     }
 }

@@ -2635,11 +2635,11 @@ Tilemap:
   - m_RefCount: 0
     m_Data: {r: NaN, g: NaN, b: NaN, a: NaN}
   - m_RefCount: 1
-    m_Data: {r: 0.70705146, g: 0.44549182, b: 0.4476723, a: 1}
+    m_Data: {r: 0.80963504, g: 0.55563676, b: 0.5690023, a: 1}
   - m_RefCount: 1
-    m_Data: {r: 0.8770503, g: 0.40786898, b: 0.53168225, a: 1}
+    m_Data: {r: 0.8395284, g: 0.51434696, b: 0.5664116, a: 1}
   - m_RefCount: 1
-    m_Data: {r: 0.73693043, g: 0.36266693, b: 0.4117358, a: 1}
+    m_Data: {r: 0.85435915, g: 0.4821489, b: 0.48474476, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -2684,7 +2684,7 @@ TilemapRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

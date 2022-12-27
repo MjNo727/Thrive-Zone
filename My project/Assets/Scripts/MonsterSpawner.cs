@@ -8,11 +8,10 @@ public class MonsterSpawner : MonoBehaviour
     public GameObject[] monsters;
     int randomSpawnPoint, randomMonster;
     public static bool spawnAllowed;
-
     void Start()
     {
         spawnAllowed = true;
-        InvokeRepeating("SpawnAMonster", 0f, 1f);
+        InvokeRepeating("SpawnAMonster", 0.5f, 1f);
     }
 
     void SpawnAMonster()
@@ -21,9 +20,7 @@ public class MonsterSpawner : MonoBehaviour
         {
             randomSpawnPoint = Random.Range(0, spawnPoints.Length);
             randomMonster = Random.Range(0, monsters.Length);
-            GameObject instantiatedObject = Instantiate(monsters[randomMonster], spawnPoints[randomSpawnPoint].position, Quaternion.identity);
-            instantiatedObject.transform.localScale = new Vector3(10f, 10f, 0f);
-            // Instantiate(monsters[randomMonster], spawnPoints[randomSpawnPoint].position, Quaternion.identity);
+            Instantiate(monsters[randomMonster], spawnPoints[randomSpawnPoint].position, Quaternion.identity);
         }
     }
 }

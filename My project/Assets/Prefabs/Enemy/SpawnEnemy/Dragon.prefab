@@ -16,9 +16,11 @@ GameObject:
   - component: {fileID: 3671754736654829455}
   - component: {fileID: 6980731920904973709}
   - component: {fileID: 4543931077194393539}
-  m_Layer: 20
+  - component: {fileID: 7420964308696561629}
+  - component: {fileID: 4790890017725879099}
+  m_Layer: 9
   m_Name: Dragon
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -127,7 +129,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.2111828, y: 1.35}
+    oldSize: {x: 1.8924731, y: 2.109375}
     newSize: {x: 1.2111828, y: 1.35}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -233,3 +235,42 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aiPath: {fileID: 3671754736654829455}
+--- !u!114 &7420964308696561629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2042907738522931027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54bdcf518ca774b4ea8b882d7e7b5063, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 50
+  currentHealth: 0
+  flashDuration: 0.1
+  numOfFlashes: 4
+  sr: {fileID: 2042907738522931025}
+  flashColor: {r: 1, g: 0, b: 0, a: 0.56078434}
+--- !u!50 &4790890017725879099
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2042907738522931027}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
