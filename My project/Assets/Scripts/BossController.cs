@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using Pathfinding;
+using TMPro;
 public class BossController : MonoBehaviour
 {
+    private GameObject target;
+    PlayerController playerLevel;
+    public int enemyLevel = 20;
+    public TextMeshProUGUI text;
     public EnemyHealthbar healthbar;
-    public float maxHealth = 100f;
+    public float maxHealth = 1000f;
     public float currentHealth;
     public float moveSpeed;
     Transform player;
@@ -14,6 +17,7 @@ public class BossController : MonoBehaviour
     public Transform gun;
     private Animator animator;
     public GameObject BulletProjectile;
+    public float bossDamage = 5f;
     public float followPlayerRange;
     private bool inRange;
     public float attackRange;
@@ -26,6 +30,11 @@ public class BossController : MonoBehaviour
 
     void Start()
     {
+        target = GameObject.FindGameObjectWithTag("Player");
+        playerLevel = target.GetComponent<PlayerController>();
+
+        text.text = "<color=red>Level: " + enemyLevel;
+
         currentHealth = maxHealth;
         healthbar.SetHealth(currentHealth, maxHealth);
         player = GameObject.FindWithTag("Player").transform;
@@ -33,20 +42,18 @@ public class BossController : MonoBehaviour
     }
     void Update()
     {
-        Vector3 scale = transform.localScale;
         Vector3 difference = player.position - gun.transform.position;
         float RotZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
         gun.transform.rotation = Quaternion.Euler(0f, 0f, RotZ);
 
         if (player.transform.position.x > transform.position.x)
         {
-            scale.x = Mathf.Abs(scale.x) * 1;
+            sr.flipX = false;
         }
         else
         {
-            scale.x = Mathf.Abs(scale.x) * -1;
+            sr.flipX = true;
         }
-        transform.localScale = scale;
 
         if (Vector2.Distance(transform.position, player.position) <= followPlayerRange && Vector2.Distance(transform.position, player.position) > attackRange)
         {
@@ -116,7 +123,7 @@ public class BossController : MonoBehaviour
         PlayerController player = other.gameObject.GetComponent<PlayerController>();
         if (player != null) // collide with player
         {
-            player.Hurt(5);
+            player.Hurt(Random.Range(bossDamage - 1f, bossDamage + 3f));
         }
     }
 

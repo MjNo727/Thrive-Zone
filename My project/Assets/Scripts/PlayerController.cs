@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour, IDataPersistance
 
     [Header("Expbar")]
     public int level;
+    public int levelCap;
     public float currentXp;
     public float requiredXp;
     private float lerpExpTimer;
@@ -61,9 +62,12 @@ public class PlayerController : MonoBehaviour, IDataPersistance
     public ParticleSystem dust;
 
     [Header("Attack")]
-    public Transform attackPoint;
-    public float attackRange = 0.5f;
+    public Transform attackHitbox;
+    public float swordRange = 0.5f;
+    public float swordDamage = 5f;
     public LayerMask enemyLayers;
+    public float attackRate = 2f;
+    float nextAttackTime = 0f;
 
     void Start()
     {
@@ -81,7 +85,7 @@ public class PlayerController : MonoBehaviour, IDataPersistance
         frontXpbar.fillAmount = currentXp / requiredXp;
         backXpbar.fillAmount = currentXp / requiredXp;
         requiredXp = CalculateRequiredXp();
-        levelText.text = "Level " + level;
+        levelText.text = "Level\n" + level;
     }
 
     void Update()
@@ -130,37 +134,25 @@ public class PlayerController : MonoBehaviour, IDataPersistance
             }
 
             // Handle Attack
-
-            if (isAttacking)
+            if (Time.time >= nextAttackTime)
             {
-                // Play attack animation
-                animator.SetTrigger("SwordAttack");
-                isAttacking = false;
-
-                // Detect enemies in range of attack
-                Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
-
-                // Damage them
-                foreach (Collider2D enemy in hitEnemies)
+                if (isAttacking)
                 {
-                    if (enemy.GetComponent<BossController>() != null)
-                    {
-                        // get boss component
-                        enemy.GetComponent<BossController>().takeDamage(5);
-                    }
-                    else if (enemy.GetComponent<EnemyController>() != null)
-                    {
-                        // get enemy component
-                        enemy.GetComponent<EnemyController>().takeDamage(5);
-                    }
+                    // Play attack animation
+                    animator.SetTrigger("SwordAttack");
+                    StartCoroutine(WaitForSwordAnimation());
+                    isAttacking = false;
+
+                    nextAttackTime = Time.time + 1f / attackRate;
                 }
             }
-
         }
     }
 
     void Respawn()
     {
+        lookDirection = new Vector2(0f, -1f);
+        transform.GetComponent<Renderer>().sortingLayerID = SortingLayer.NameToID("Layer 2");
         canMove = true;
         animator.SetBool("isDead", false);
         currentHealth = maxHealth;
@@ -229,7 +221,7 @@ public class PlayerController : MonoBehaviour, IDataPersistance
                 frontXpbar.fillAmount = Mathf.Lerp(fXp, backXpbar.fillAmount, percentComplete);
             }
         }
-        expText.text = currentXp + "/" + requiredXp;
+        expText.text = Mathf.Round(currentXp) + "/" + requiredXp;
     }
 
     public void RestoreHealth(float healAmount)
@@ -240,8 +232,13 @@ public class PlayerController : MonoBehaviour, IDataPersistance
 
     public void IncreaseHealthCap(int level)
     {
-        maxHealth += (currentHealth * 0.01f) * ((100 - level) * 0.1f);
-        currentHealth = maxHealth;
+        maxHealth += (currentHealth * 0.01f) * ((levelCap - level) * 0.1f);
+        currentHealth += maxHealth * 0.25f;
+    }
+
+    public void IncreaseDamageCap(float amount)
+    {
+        swordDamage += amount;
     }
 
     // Handle Input System Events
@@ -280,12 +277,12 @@ public class PlayerController : MonoBehaviour, IDataPersistance
         }
     }
 
-    public void GainExpFlatRate(float xpGained)
-    {
-        currentXp += xpGained;
-        lerpExpTimer = 0f;
-        delayTimer = 0f;
-    }
+    // public void GainExpFlatRate(float xpGained)
+    // {
+    //     currentXp += xpGained;
+    //     lerpExpTimer = 0f;
+    //     delayTimer = 0f;
+    // }
 
     public void GainExpScalable(float xpGained, int passedLevel)
     {
@@ -314,13 +311,18 @@ public class PlayerController : MonoBehaviour, IDataPersistance
 
     public void LevelUp()
     {
-        level++;
-        frontXpbar.fillAmount = 0f;
-        backXpbar.fillAmount = 0f;
-        currentXp = Mathf.RoundToInt(currentXp - requiredXp);
-        IncreaseHealthCap(level);
-        requiredXp = CalculateRequiredXp();
-        levelText.text = "Level " + level;
+        if (level < 20)
+        {
+            level++;
+            frontXpbar.fillAmount = 0f;
+            backXpbar.fillAmount = 0f;
+            currentXp = Mathf.RoundToInt(currentXp - requiredXp);
+
+            IncreaseHealthCap(level);
+            IncreaseDamageCap(2f);
+            requiredXp = CalculateRequiredXp();
+            levelText.text = "Level " + level;
+        }
     }
 
     private void OnDisable()
@@ -365,8 +367,30 @@ public class PlayerController : MonoBehaviour, IDataPersistance
         Respawn();
     }
 
+    private IEnumerator WaitForSwordAnimation()
+    {
+        yield return new WaitForSeconds(0.2f);
+        // Detect enemies in range of attack
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackHitbox.position, swordRange, enemyLayers);
+
+        // Damage them
+        foreach (Collider2D enemy in hitEnemies)
+        {
+            if (enemy.GetComponent<BossController>() != null)
+            {
+                // get boss component
+                enemy.GetComponent<BossController>().takeDamage(swordDamage);
+            }
+            else if (enemy.GetComponent<EnemyController>() != null)
+            {
+                // get enemy component
+                enemy.GetComponent<EnemyController>().takeDamage(swordDamage);
+            }
+        }
+    }
+
     void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+        Gizmos.DrawWireSphere(attackHitbox.position, swordRange);
     }
 }
