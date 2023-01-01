@@ -111,7 +111,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: -21, y: -2}
+  m_AnchoredPosition: {x: -13, y: -2}
   m_SizeDelta: {x: 89.45, y: 89.45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &210475788
@@ -334,7 +334,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.151, y: 0.979}
+  m_AnchoredPosition: {x: 0.151, y: 0.86}
   m_SizeDelta: {x: 468.2029, y: 65.1941}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &836922900
@@ -413,7 +413,7 @@ MonoBehaviour:
   slider: {fileID: 1506153240}
   low: {r: 1, g: 0, b: 0, a: 1}
   high: {r: 0.07062721, g: 1, b: 0, a: 1}
-  offset: {x: 0, y: 0, z: 0}
+  offset: {x: 0, y: 2, z: 0}
 --- !u!1 &1506153238
 GameObject:
   m_ObjectHideFlags: 0
@@ -693,7 +693,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -849,16 +849,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b4c65178e3b5be45a64677bed926362, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyLevel: 20
   text: {fileID: 7960256965306470730}
   healthbar: {fileID: 836922897}
-  maxHealth: 1000
-  currentHealth: 0
-  moveSpeed: 3
+  healthBarUI: {fileID: 836922895}
+  lvCanvas: {fileID: 0}
   gunPoint: {fileID: 626253312}
   gun: {fileID: 5368600285010970270}
   BulletProjectile: {fileID: 5613834097978123842, guid: 2f67d8e2fba1fb540ab91fd81cae0679,
     type: 3}
+  enemyLevel: 20
+  maxHealth: 1000
+  currentHealth: 0
+  moveSpeed: 3
   bossDamage: 5
   followPlayerRange: 6
   attackRange: 5
@@ -947,7 +949,7 @@ GameObject:
   - component: {fileID: 322300360682767489}
   - component: {fileID: 7281043127134987950}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: LvCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

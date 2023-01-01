@@ -6,11 +6,19 @@ using UnityEngine.SceneManagement;
 [System.Serializable]
 public class GameData
 {
-    public float health;
-    public Vector2 playerPostion;
+    public float playerCurrentHealth;
+    public float playerMaxHealth;
+    public float playerCurrentExp;
+    public float playerRequiredExp;
+    public int playerCurrentLevel;
+    public Vector2 playerCurrentPostion;
     public GameData()
     {
-        this.health = 100f;
-        playerPostion = Vector2.zero;
+        this.playerCurrentHealth = 100f;
+        this.playerMaxHealth = 100f;
+        this.playerCurrentExp = 0f;
+        this.playerRequiredExp = 0f;
+        this.playerCurrentLevel = 1;
+        playerCurrentPostion = Vector2.zero;
     }
 }

@@ -8,6 +8,7 @@ public class DataPersistanceManager : MonoBehaviour
 {
     [SerializeField] private bool initializeDataIfNull = false;
     [SerializeField] private string fileName;
+    public bool isNewGame = false;
     private GameData gameData;
     private List<IDataPersistance> dataPersistanceObjects;
     private FileDataHandler dataHandler;
@@ -41,6 +42,7 @@ public class DataPersistanceManager : MonoBehaviour
 
     public void NewGame()
     {
+        isNewGame = true;
         this.gameData = new GameData();
     }
 
