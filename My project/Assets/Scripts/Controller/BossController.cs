@@ -5,6 +5,7 @@ using TMPro;
 public class BossController : MonoBehaviour
 {
     private GameObject target;
+    public GameObject victoryMenuUI;
     PlayerController playerLevel;
     public TextMeshProUGUI text;
     public EnemyHealthbar healthbar;
@@ -115,9 +116,14 @@ public class BossController : MonoBehaviour
         // turn off health bar
         healthBarUI.SetActive(false);
         lvCanvas.SetActive(false);
+
         // Die animation
         animator.SetBool("isDead", true);
-        // Disable enemy
+
+        //Victory Menu popup
+        StartCoroutine(PlayVictoryUI(2f));
+
+        // Disable boss
         GetComponent<Collider2D>().enabled = false;
         this.enabled = false;
     }
@@ -133,7 +139,7 @@ public class BossController : MonoBehaviour
     void OnCollisionEnter2D(Collision2D other)
     {
         PlayerController player = other.gameObject.GetComponent<PlayerController>();
-        
+
         if (player != null) // collide with player
         {
             player.Hurt(Random.Range(bossDamage - 1f, bossDamage + 3f));
@@ -151,5 +157,14 @@ public class BossController : MonoBehaviour
             yield return new WaitForSeconds(flashDuration);
             temp++;
         }
+    }
+
+    private IEnumerator PlayVictoryUI(float time){
+        yield return new WaitForSeconds(time);
+        AudioManager.instance.PauseMusic("Theme");
+        AudioManager.instance.PlaySFX("Victory");
+        victoryMenuUI.SetActive(true);
+        Cursor.visible = true;
+        Time.timeScale = 0;
     }
 }

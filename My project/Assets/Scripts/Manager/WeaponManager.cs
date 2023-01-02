@@ -11,10 +11,9 @@ public class WeaponManager : MonoBehaviour
     public Weapon activateWeapon;
     public Sprite defaultFrame, activateFrame;
 
-    public int totalPoints = 20;
+    public int totalPoints = 6;
     public int remainingPoints;
     public TextMeshProUGUI pointsText;
-    public TextMeshProUGUI weaponLevelText;
 
     private void Awake()
     {

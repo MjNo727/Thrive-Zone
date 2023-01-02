@@ -63,14 +63,8 @@ public class PlayerController : MonoBehaviour, IDataPersistance
 
     [Header("Attack")]
     public Transform attackHitbox;
-    public float swordRange;
-    // public float hammerRange;
-    public float swordDamage;
-    // public float hammerDamage;
-    public LayerMask enemyLayers;
-    public float swordAttackRate = 2f;
-    // public float hammerAttackRate = 3f;
-    float nextAttackTime = 0f;
+    public SwordController swordController;
+
     Vector2 mousePos;
 
     void Start()
@@ -94,7 +88,6 @@ public class PlayerController : MonoBehaviour, IDataPersistance
 
     void Update()
     {
-        LookAtMouse();
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         UpdateHealthUI();
         UpdateXpUI();
@@ -119,6 +112,7 @@ public class PlayerController : MonoBehaviour, IDataPersistance
                 lookDirection.Set(move.x, move.y);
                 lookDirection.Normalize();
             }
+
             animator.SetFloat("LookX", lookDirection.x);
             animator.SetFloat("LookY", lookDirection.y);
             animator.SetFloat("Speed", move.magnitude);
@@ -126,36 +120,23 @@ public class PlayerController : MonoBehaviour, IDataPersistance
             // Handle Dash
             if (isDashing)
             {
-                animator.SetBool("Slide", true);
+                animator.SetTrigger("Slide");
                 dust.Play();
                 Vector2 Position = transform.position;
                 Position += lookDirection * dashDistance * Time.deltaTime;
                 rb.MovePosition(Position);
                 isDashing = false;
             }
-            else
-            {
-                animator.SetBool("Slide", false);
-            }
 
             // Handle Attack
-            if (Time.time >= nextAttackTime)
+            if (isAttacking)
             {
-                if (isAttacking)
-                {
-                    // ===============Sword====================
-                    //play sfx
-                    AudioManager.instance.PlaySFX("Sword");
-                    // Play attack animation
-                    animator.SetTrigger("SwordAttack");
-                    StartCoroutine(WaitForSwordAnimation());
-                    isAttacking = false;
-                    nextAttackTime = Time.time + 1f / swordAttackRate;
-
-                    // ===============Gun======================
-                    
-                }
+                // ===============Sword====================
+                SwordAttack();
+                // ===============Gun======================
+                // GunAttack();
             }
+
         }
     }
 
@@ -169,11 +150,42 @@ public class PlayerController : MonoBehaviour, IDataPersistance
         transform.position = respawnLocation.position;
     }
 
+    public void SwordAttack()
+    {
+        if (lookDirection.x > 0)
+        {
+            swordController.AttackRight(); 
+            //play sfx
+            AudioManager.instance.PlaySFX("Sword");
+        }
+        else if (lookDirection.x < 0)
+        {
+            swordController.AttackLeft();
+            //play sfx
+            AudioManager.instance.PlaySFX("Sword");
+        }
+        else if(lookDirection.y > 0){
+            swordController.AttackUp();
+            //play sfx
+            AudioManager.instance.PlaySFX("Sword");
+        }
+        else if(lookDirection.y < 0){
+            swordController.AttackDown();
+            //play sfx
+            AudioManager.instance.PlaySFX("Sword");
+        }
+    }
+
+    public void EndSwordAttack(){
+        swordController.StopAttack();
+    }
+
     public void Hurt(float damage)
     {
         //Set health bar UI
         //healthBar.setHealth(currentHealth);
 
+        swordController.StopAttack();
         currentHealth -= damage;
         AudioManager.instance.PlaySFX("Hit");
         animator.SetTrigger("Hit");
@@ -248,7 +260,7 @@ public class PlayerController : MonoBehaviour, IDataPersistance
 
     public void IncreaseDamageCap(float amount)
     {
-        swordDamage += amount;
+        swordController.swordDamage += amount;
     }
 
     // Handle Input System Events
@@ -279,20 +291,9 @@ public class PlayerController : MonoBehaviour, IDataPersistance
     {
         if (context.performed)
         {
-            isAttacking = true;
-        }
-        if (context.canceled)
-        {
-            isAttacking = false;
+            animator.SetTrigger("SwordAttack");
         }
     }
-
-    // public void GainExpFlatRate(float xpGained)
-    // {
-    //     currentXp += xpGained;
-    //     lerpExpTimer = 0f;
-    //     delayTimer = 0f;
-    // }
 
     public void GainExpScalable(float xpGained, int passedLevel)
     {
@@ -332,20 +333,10 @@ public class PlayerController : MonoBehaviour, IDataPersistance
             currentXp = Mathf.RoundToInt(currentXp - requiredXp);
 
             IncreaseHealthCap(level);
-            IncreaseDamageCap(2f);
+            IncreaseDamageCap(0.5f);
             requiredXp = CalculateRequiredXp();
             levelText.text = "Level " + level;
         }
-    }
-
-    private void LookAtMouse()
-    {
-        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-
-        animator.SetFloat("LookX", mousePos.x);
-        animator.SetFloat("LookY", mousePos.y);
-
-        // transform.up = mousePos - new Vector2(transform.position.x, transform.position.y);
     }
 
     private void OnDisable()
@@ -396,34 +387,5 @@ public class PlayerController : MonoBehaviour, IDataPersistance
         yield return new WaitForSeconds(waitTime);
         rb.isKinematic = false;
         Respawn();
-    }
-
-    private IEnumerator WaitForSwordAnimation()
-    {
-        yield return new WaitForSeconds(0.2f);
-        // Detect enemies in range of attack
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackHitbox.position, swordRange, enemyLayers);
-
-        // Damage them
-        foreach (Collider2D enemy in hitEnemies)
-        {
-            if (enemy.GetComponent<BossController>() != null)
-            {
-                // get boss component
-                enemy.GetComponent<BossController>().takeDamage(swordDamage);
-            }
-            else if (enemy.GetComponent<EnemyController>() != null)
-            {
-                // get enemy component
-                enemy.GetComponent<EnemyController>().takeDamage(swordDamage);
-            }
-        }
-    }
-
-    void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(attackHitbox.position, swordRange);
-        // Gizmos.color = Color.red;
-        // Gizmos.DrawWireSphere(attackHitbox.position, hammerRange);
     }
 }

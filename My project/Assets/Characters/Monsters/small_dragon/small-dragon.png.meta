@@ -33,7 +33,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -652,7 +652,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      small-dragon_29: 1202539498
+      small-dragon_22: -1897817750
       small-dragon_6: 651045638
       small-dragon_19: 934866609
       small-dragon_13: 128885154
@@ -683,7 +683,7 @@ TextureImporter:
       small-dragon_8: 1411022630
       small-dragon_5: 1005859106
       small-dragon_28: 739434086
-      small-dragon_22: -1897817750
+      small-dragon_29: 1202539498
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

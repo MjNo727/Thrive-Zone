@@ -184,8 +184,4 @@ public class EnemyController : MonoBehaviour
             player.Hurt(3);
         }
     }
-
-    public void ReceiveHit(RaycastHit2D hit){
-        takeDamage(player.swordDamage);
-    }
 }

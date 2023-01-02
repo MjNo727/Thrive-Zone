@@ -74,7 +74,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 7
   spritePivot: {x: 0.5, y: 0}
-  spritePixelsToUnits: 130
+  spritePixelsToUnits: 64
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 0
   alphaUsage: 1
@@ -156,64 +156,64 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: rifle_0
+      name: weapon_rifle_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 448
-        height: 432
-      alignment: 9
-      pivot: {x: 0.5, y: 0.295}
+        x: 102
+        y: 152
+        width: 169
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8d25f273a7976a370800000000000000
-      internalID: 8333481726314500824
+      spriteID: 588523b338043c1479a908ef5dd2590b
+      internalID: -113706308
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: rifle_1
+      name: weapon_rifle_1
       rect:
         serializedVersion: 2
-        x: 448
-        y: 0
-        width: 448
-        height: 432
-      alignment: 9
-      pivot: {x: 0.5, y: 0.295}
+        x: 1087
+        y: 219
+        width: 65
+        height: 131
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e64e4d5dd3f43cdd0800000000000000
-      internalID: -2467041043869801362
+      spriteID: d1ba956d3112dc4498577bbb370b2e16
+      internalID: -1422832996
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: rifle_2
+      name: weapon_rifle_2
       rect:
         serializedVersion: 2
-        x: 896
-        y: 0
-        width: 448
-        height: 432
-      alignment: 9
-      pivot: {x: 0.5, y: 0.295}
+        x: 639
+        y: 84
+        width: 65
+        height: 127
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d1ddc262b6f4da680800000000000000
-      internalID: -8742243980035695331
+      spriteID: 28998c6e889991b4b988467adabbee2c
+      internalID: 1704697488
       vertices: []
       indices: 
       edges: []
@@ -229,9 +229,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      rifle_2: -8742243980035695331
-      rifle_1: -2467041043869801362
-      rifle_0: 8333481726314500824
+      weapon_rifle_0: -113706308
+      weapon_rifle_2: 1704697488
+      weapon_rifle_1: -1422832996
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

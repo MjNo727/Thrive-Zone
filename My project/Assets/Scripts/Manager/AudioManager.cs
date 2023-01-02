@@ -22,11 +22,22 @@ public class AudioManager : MonoBehaviour
     public void PlayMusic(string name){
         Sound s = Array.Find(musicSounds, x => x.name == name);
         if(s == null){
-            Debug.Log("Sound not found!");
+            Debug.Log("Music not found!");
         }
         else{
             musicSource.clip = s.clip;
             musicSource.Play();
+        }
+    }
+
+    public void PauseMusic(string name){
+        Sound s = Array.Find(musicSounds, x => x.name == name);
+        if(s == null){
+            Debug.Log("Music not found");
+        }
+        else{
+            musicSource.clip = s.clip;
+            musicSource.Pause();
         }
     }
 

@@ -222,7 +222,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -236,7 +236,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 7
   spritePivot: {x: 0.5, y: 0}
-  spritePixelsToUnits: 130
+  spritePixelsToUnits: 64
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 0
   alphaUsage: 1
@@ -259,7 +259,7 @@ TextureImporter:
     maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 1
     allowsAlphaSplitting: 0
@@ -318,442 +318,442 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: bow_0
+      name: weapon_bow_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 864
-        width: 448
-        height: 432
-      alignment: 9
-      pivot: {x: 0.5, y: 0.295}
+        x: 132
+        y: 976
+        width: 75
+        height: 153
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d8a2367adf90c3af0800000000000000
-      internalID: -415446080585258355
+      spriteID: d5a9df8e17f0fd145b951abc06512a5f
+      internalID: 117853337
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: bow_1
+      name: weapon_bow_1
       rect:
         serializedVersion: 2
-        x: 448
-        y: 864
-        width: 448
-        height: 432
-      alignment: 9
-      pivot: {x: 0.5, y: 0.295}
+        x: 580
+        y: 976
+        width: 75
+        height: 153
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a532ca5df987c3c70800000000000000
-      internalID: 8952162787185664858
+      spriteID: e77761a467169aa42a33016d86cd7529
+      internalID: 948634786
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: bow_2
+      name: weapon_bow_2
       rect:
         serializedVersion: 2
-        x: 896
-        y: 864
-        width: 448
-        height: 432
-      alignment: 9
-      pivot: {x: 0.5, y: 0.295}
+        x: 1028
+        y: 976
+        width: 75
+        height: 153
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 80e380880f939f9f0800000000000000
-      internalID: -434252183827366392
+      spriteID: 066ab24135c3dd74c8a13f2f793ce46e
+      internalID: -20474552
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: bow_3
+      name: weapon_bow_3
       rect:
         serializedVersion: 2
-        x: 1344
-        y: 864
-        width: 448
-        height: 432
-      alignment: 9
-      pivot: {x: 0.5, y: 0.295}
+        x: 1476
+        y: 976
+        width: 75
+        height: 153
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6965917a6d114bf00800000000000000
-      internalID: 1131549020000966294
+      spriteID: 6833c57dfad589c469a7203a850066d7
+      internalID: -1346033561
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: bow_4
+      name: weapon_bow_4
       rect:
         serializedVersion: 2
-        x: 1792
-        y: 864
-        width: 448
-        height: 432
-      alignment: 9
-      pivot: {x: 0.5, y: 0.295}
+        x: 1902
+        y: 976
+        width: 127
+        height: 153
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cdab7e1dce25cf090800000000000000
-      internalID: -7999427661029459236
+      spriteID: 4b47cc962e57dbe4485a059841991e1f
+      internalID: -639980778
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: bow_5
+      name: weapon_bow_5
       rect:
         serializedVersion: 2
-        x: 2240
-        y: 864
-        width: 448
-        height: 432
-      alignment: 9
-      pivot: {x: 0.5, y: 0.295}
+        x: 2362
+        y: 976
+        width: 127
+        height: 153
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e7f9051a3737be7c0800000000000000
-      internalID: -4041009300170039426
+      spriteID: 64e16d0371189c34fac9a293ac384c4f
+      internalID: -283975384
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: bow_6
+      name: weapon_bow_6
       rect:
         serializedVersion: 2
-        x: 2688
-        y: 864
-        width: 448
-        height: 432
-      alignment: 9
-      pivot: {x: 0.5, y: 0.295}
+        x: 2814
+        y: 976
+        width: 127
+        height: 153
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9cc58b9f16ddb87a0800000000000000
-      internalID: -6373757434741629751
+      spriteID: 30337c93ac2225f42b4803c4847172b8
+      internalID: 415446199
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: bow_7
+      name: weapon_bow_7
       rect:
         serializedVersion: 2
-        x: 3136
-        y: 864
-        width: 448
-        height: 432
-      alignment: 9
-      pivot: {x: 0.5, y: 0.295}
+        x: 3282
+        y: 985
+        width: 154
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d752ab84ec43f4430800000000000000
-      internalID: 3769289473720460669
+      spriteID: bc57c4edf469ae444b4cc8263513a479
+      internalID: 1634049783
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: bow_8
+      name: weapon_bow_8
       rect:
         serializedVersion: 2
-        x: 3584
-        y: 864
-        width: 448
-        height: 432
-      alignment: 9
-      pivot: {x: 0.5, y: 0.295}
+        x: 3730
+        y: 985
+        width: 154
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a1df0f99d47b6a800800000000000000
-      internalID: 623387142360464666
+      spriteID: 0a887a7bec204184ba5ab226ee022b98
+      internalID: -88196105
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: bow_9
+      name: weapon_bow_9
       rect:
         serializedVersion: 2
-        x: 0
-        y: 432
-        width: 448
-        height: 432
-      alignment: 9
-      pivot: {x: 0.5, y: 0.295}
+        x: 1042
+        y: 536
+        width: 154
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 87d11a617c20259c0800000000000000
-      internalID: -3940083669894357640
+      spriteID: 274b2fba9ea0ead47b43e9f3ecd1f9b3
+      internalID: 728564222
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: bow_10
+      name: weapon_bow_10
       rect:
         serializedVersion: 2
-        x: 448
-        y: 432
-        width: 448
-        height: 432
-      alignment: 9
-      pivot: {x: 0.5, y: 0.295}
+        x: 1490
+        y: 545
+        width: 154
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4fbb4049d445dca70800000000000000
-      internalID: 8848821535025445876
+      spriteID: b37bc98b682b274428bf5028440bf054
+      internalID: 385543103
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: bow_11
+      name: weapon_bow_11
       rect:
         serializedVersion: 2
-        x: 896
-        y: 432
-        width: 448
-        height: 432
-      alignment: 9
-      pivot: {x: 0.5, y: 0.295}
+        x: 1938
+        y: 549
+        width: 154
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f9ca88c4d7f38ab60800000000000000
-      internalID: 7757520165533166751
+      spriteID: 1ba02b174e686d64faa538a7d6b5705b
+      internalID: 1243367567
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: bow_12
+      name: weapon_bow_12
       rect:
         serializedVersion: 2
-        x: 1344
-        y: 432
-        width: 448
-        height: 432
-      alignment: 9
-      pivot: {x: 0.5, y: 0.295}
+        x: 2387
+        y: 618
+        width: 153
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 524e188129ff91040800000000000000
-      internalID: 4619003895786628133
+      spriteID: 50933ed50018cb54dad3b5b23c25c88e
+      internalID: 1537049251
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: bow_13
+      name: weapon_bow_13
       rect:
         serializedVersion: 2
-        x: 1792
-        y: 432
-        width: 448
-        height: 432
-      alignment: 9
-      pivot: {x: 0.5, y: 0.295}
+        x: 2835
+        y: 618
+        width: 153
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 511980107b85a2910800000000000000
-      internalID: 1813359342989644053
+      spriteID: ee965323adc94664f9931f4411ee7a93
+      internalID: -650029194
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: bow_14
+      name: weapon_bow_14
       rect:
         serializedVersion: 2
-        x: 2240
-        y: 432
-        width: 448
-        height: 432
-      alignment: 9
-      pivot: {x: 0.5, y: 0.295}
+        x: 3283
+        y: 618
+        width: 153
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 733aee85624aafcf0800000000000000
-      internalID: -217681147366300873
+      spriteID: abcd6a377482c5449bd0cae5c42595ed
+      internalID: 1430295460
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: bow_15
+      name: weapon_bow_15
       rect:
         serializedVersion: 2
-        x: 2688
-        y: 432
-        width: 448
-        height: 432
-      alignment: 9
-      pivot: {x: 0.5, y: 0.295}
+        x: 3731
+        y: 618
+        width: 153
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 05c64da3a3af533a0800000000000000
-      internalID: -6686162943759586224
+      spriteID: 845727c73af77524d9ca8845116fc5f5
+      internalID: 1196932219
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: bow_16
+      name: weapon_bow_16
       rect:
         serializedVersion: 2
-        x: 3136
-        y: 432
-        width: 448
-        height: 432
-      alignment: 9
-      pivot: {x: 0.5, y: 0.295}
+        x: 146
+        y: 553
+        width: 154
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 80b9f2b7208cc3730800000000000000
-      internalID: 3980276083670883080
+      spriteID: 83d9016de5e7f8441affff8f50825b30
+      internalID: 156461862
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: bow_17
+      name: weapon_bow_17
       rect:
         serializedVersion: 2
-        x: 3584
-        y: 432
-        width: 448
-        height: 432
-      alignment: 9
-      pivot: {x: 0.5, y: 0.295}
+        x: 594
+        y: 553
+        width: 154
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f5fa86bc3ead1d550800000000000000
-      internalID: 6183964435261468511
+      spriteID: 72d9a88c1e0765343b2dbee919f9f642
+      internalID: 559952124
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: bow_18
+      name: weapon_bow_18
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 448
-        height: 432
-      alignment: 9
-      pivot: {x: 0.5, y: 0.295}
+        x: 147
+        y: 163
+        width: 153
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 47632507ef461ca60800000000000000
-      internalID: 7692540682494424692
+      spriteID: f9f9b383f8bf2b64aade9d34e0d5a820
+      internalID: -1535822336
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: bow_19
+      name: weapon_bow_19
       rect:
         serializedVersion: 2
-        x: 448
-        y: 0
-        width: 448
-        height: 432
-      alignment: 9
-      pivot: {x: 0.5, y: 0.295}
+        x: 595
+        y: 153
+        width: 153
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: daadbc0779df582f0800000000000000
-      internalID: -971091317754176851
+      spriteID: 39a05ee8945637343b4679f1d96278e2
+      internalID: -649765876
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: bow_20
+      name: weapon_bow_20
       rect:
         serializedVersion: 2
-        x: 896
-        y: 0
-        width: 448
-        height: 432
-      alignment: 9
-      pivot: {x: 0.5, y: 0.295}
+        x: 1043
+        y: 150
+        width: 153
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 539fb72b783b33570800000000000000
-      internalID: 8445291121646238005
+      spriteID: 9f819d63025ccbc48bea15a2ba9540a6
+      internalID: -827546098
       vertices: []
       indices: 
       edges: []
@@ -769,27 +769,27 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      bow_9: -3940083669894357640
-      bow_12: 4619003895786628133
-      bow_6: -6373757434741629751
-      bow_1: 8952162787185664858
-      bow_2: -434252183827366392
-      bow_4: -7999427661029459236
-      bow_17: 6183964435261468511
-      bow_10: 8848821535025445876
-      bow_14: -217681147366300873
-      bow_16: 3980276083670883080
-      bow_13: 1813359342989644053
-      bow_5: -4041009300170039426
-      bow_15: -6686162943759586224
-      bow_0: -415446080585258355
-      bow_19: -971091317754176851
-      bow_11: 7757520165533166751
-      bow_8: 623387142360464666
-      bow_3: 1131549020000966294
-      bow_18: 7692540682494424692
-      bow_7: 3769289473720460669
-      bow_20: 8445291121646238005
+      weapon_bow_16: 156461862
+      weapon_bow_3: -1346033561
+      weapon_bow_14: 1430295460
+      weapon_bow_17: 559952124
+      weapon_bow_10: 385543103
+      weapon_bow_12: 1537049251
+      weapon_bow_0: 117853337
+      weapon_bow_18: -1535822336
+      weapon_bow_20: -827546098
+      weapon_bow_8: -88196105
+      weapon_bow_9: 728564222
+      weapon_bow_13: -650029194
+      weapon_bow_4: -639980778
+      weapon_bow_19: -649765876
+      weapon_bow_1: 948634786
+      weapon_bow_15: 1196932219
+      weapon_bow_5: -283975384
+      weapon_bow_6: 415446199
+      weapon_bow_11: 1243367567
+      weapon_bow_2: -20474552
+      weapon_bow_7: 1634049783
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
