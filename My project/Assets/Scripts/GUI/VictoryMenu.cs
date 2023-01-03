@@ -5,9 +5,11 @@ using UnityEngine.SceneManagement;
 public class VictoryMenu : MonoBehaviour
 {
     public GameObject victoryMenuUI;
+
     public void CallMainMenu()
     {
         Time.timeScale = 1;
+        victoryMenuUI.SetActive(false);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 

@@ -20,6 +20,15 @@ public class WeaponBtn : MonoBehaviour
         }
     }
 
+    private void Update(){
+        if(WeaponManager.instance.isReset){
+            weaponImage.sprite = defaultWeaponSprite;
+            weaponName.text = "Description";
+            weaponDesc.text = "No description";
+            WeaponManager.instance.isReset = false;
+        }
+    }
+
     public void PressWeaponButton(){
         WeaponManager.instance.activateWeapon = transform.GetComponent<Weapon>();
         weaponImage.sprite = WeaponManager.instance.weapons[weaponBtnId].wSprite;

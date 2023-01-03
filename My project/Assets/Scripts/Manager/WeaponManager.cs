@@ -10,10 +10,13 @@ public class WeaponManager : MonoBehaviour
     public WeaponBtn[] weaponBtns;
     public Weapon activateWeapon;
     public Sprite defaultFrame, activateFrame;
+    public ParticleSystem[] upgradeEffects;
 
     public int totalPoints = 6;
     public int remainingPoints;
     public TextMeshProUGUI pointsText;
+    public GameObject notEnoughText, previousRequiredText, notSelectedText;
+    public bool isReset;
 
     private void Awake()
     {
@@ -62,6 +65,13 @@ public class WeaponManager : MonoBehaviour
 
     public void UpgradeButton()
     {
+        if (activateWeapon == null)
+        {
+            AudioManager.instance.PlaySFX("UpgradeFail");
+            StartCoroutine(ShotPromptText(notSelectedText));
+            return;
+        }
+
         if (!activateWeapon.isUpgraded && remainingPoints >= 1)
         {
             for (int i = 0; i < activateWeapon.previousWeapons.Length; i++)
@@ -71,25 +81,29 @@ public class WeaponManager : MonoBehaviour
                     AudioManager.instance.PlaySFX("Upgrade");
                     activateWeapon.isUpgraded = true;
                     remainingPoints -= 1;
+                    StartCoroutine(SpawnUpgradeEffectCo());
                 }
                 else
                 {
                     AudioManager.instance.PlaySFX("UpgradeFail");
-                    Debug.Log("Another weapon is required to this weapon to unlock");
+                    StartCoroutine(ShotPromptText(previousRequiredText));
                 }
             }
         }
-        else
+        else if (remainingPoints <= 0)
         {
             AudioManager.instance.PlaySFX("UpgradeFail");
-            Debug.Log("Not enough points OR " + activateWeapon + " is already upgraded");
+            StartCoroutine(ShotPromptText(notEnoughText));
         }
+
         UpdateWeaponImage();
         DisplayUpgradePoints();
     }
 
     public void ResetButton()
     {
+        isReset = true;
+        activateWeapon = null;
         remainingPoints = totalPoints;
         for (int i = 0; i < weapons.Length; i++)
         {
@@ -102,4 +116,17 @@ public class WeaponManager : MonoBehaviour
         UpdateWeaponImage();
     }
 
+    IEnumerator ShotPromptText(GameObject go)
+    {
+        go.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        go.SetActive(false);
+    }
+
+    IEnumerator SpawnUpgradeEffectCo()
+    {
+        activateWeapon.transform.GetChild(1).gameObject.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        activateWeapon.transform.GetChild(1).gameObject.SetActive(false);
+    }
 }
