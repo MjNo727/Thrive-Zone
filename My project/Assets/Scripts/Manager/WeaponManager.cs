@@ -8,30 +8,24 @@ public class WeaponManager : MonoBehaviour
     public static WeaponManager instance;
     public Weapon[] weapons;
     public WeaponBtn[] weaponBtns;
+    public Image[] WeaponSlots;
     public Weapon activateWeapon;
     public Sprite defaultFrame, activateFrame;
-    public ParticleSystem[] upgradeEffects;
 
     public int totalPoints = 6;
     public int remainingPoints;
     public TextMeshProUGUI pointsText;
-    public GameObject notEnoughText, previousRequiredText, notSelectedText;
+
     public bool isReset;
 
     private void Awake()
     {
-        if (instance == null)
+        if (instance != null)
         {
-            instance = this;
+            Destroy(this.gameObject);
+            return;
         }
-        else
-        {
-            if (instance != this)
-            {
-                Destroy(gameObject);
-            }
-        }
-        DontDestroyOnLoad(gameObject);
+        instance = this;
     }
 
     private void Start()
@@ -68,7 +62,6 @@ public class WeaponManager : MonoBehaviour
         if (activateWeapon == null)
         {
             AudioManager.instance.PlaySFX("UpgradeFail");
-            StartCoroutine(ShotPromptText(notSelectedText));
             return;
         }
 
@@ -80,20 +73,20 @@ public class WeaponManager : MonoBehaviour
                 {
                     AudioManager.instance.PlaySFX("Upgrade");
                     activateWeapon.isUpgraded = true;
+                    char c = activateWeapon.name[6];
+                    if(c.Equals('1')) WeaponSlots[0].sprite = activateWeapon.wSprite;
+                    else WeaponSlots[1].sprite = activateWeapon.wSprite;
                     remainingPoints -= 1;
-                    StartCoroutine(SpawnUpgradeEffectCo());
                 }
                 else
                 {
                     AudioManager.instance.PlaySFX("UpgradeFail");
-                    StartCoroutine(ShotPromptText(previousRequiredText));
                 }
             }
         }
         else if (remainingPoints <= 0)
         {
             AudioManager.instance.PlaySFX("UpgradeFail");
-            StartCoroutine(ShotPromptText(notEnoughText));
         }
 
         UpdateWeaponImage();
@@ -112,21 +105,8 @@ public class WeaponManager : MonoBehaviour
                 weapons[i].isUpgraded = false;
             }
         }
+
         DisplayUpgradePoints();
         UpdateWeaponImage();
-    }
-
-    IEnumerator ShotPromptText(GameObject go)
-    {
-        go.SetActive(true);
-        yield return new WaitForSeconds(1f);
-        go.SetActive(false);
-    }
-
-    IEnumerator SpawnUpgradeEffectCo()
-    {
-        activateWeapon.transform.GetChild(1).gameObject.SetActive(true);
-        yield return new WaitForSeconds(1f);
-        activateWeapon.transform.GetChild(1).gameObject.SetActive(false);
     }
 }

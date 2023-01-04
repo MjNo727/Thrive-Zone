@@ -62,8 +62,9 @@ public class PlayerController : MonoBehaviour, IDataPersistance
     public ParticleSystem levelUp, levelUpSplash;
 
     [Header("Attack")]
-    public Transform attackHitbox;
+    public Transform swordHitbox, hammerHitbox;
     public SwordController swordController;
+    public HammerController hammerController;
 
     Vector2 mousePos;
 
@@ -132,7 +133,11 @@ public class PlayerController : MonoBehaviour, IDataPersistance
             if (isAttacking)
             {
                 // ===============Sword====================
-                SwordAttack();
+                // SwordAttack();
+
+                // ===============Hammer====================
+                HammerAttack();
+
                 // ===============Gun======================
                 // GunAttack();
             }
@@ -176,8 +181,38 @@ public class PlayerController : MonoBehaviour, IDataPersistance
         }
     }
 
+    public void HammerAttack()
+    {
+        if (lookDirection.x > 0)
+        {
+            hammerController.AttackRight(); 
+            //play sfx
+            AudioManager.instance.PlaySFX("Hammer");
+        }
+        else if (lookDirection.x < 0)
+        {
+            hammerController.AttackLeft();
+            //play sfx
+            AudioManager.instance.PlaySFX("Hammer");
+        }
+        else if(lookDirection.y > 0){
+            hammerController.AttackUp();
+            //play sfx
+            AudioManager.instance.PlaySFX("Hammer");
+        }
+        else if(lookDirection.y < 0){
+            hammerController.AttackDown();
+            //play sfx
+            AudioManager.instance.PlaySFX("Hammer");
+        }
+    }
+
     public void EndSwordAttack(){
         swordController.StopAttack();
+    }
+
+    public void EndHammerAttack(){
+        hammerController.StopAttack();
     }
 
     public void Hurt(float damage)
@@ -185,7 +220,8 @@ public class PlayerController : MonoBehaviour, IDataPersistance
         //Set health bar UI
         //healthBar.setHealth(currentHealth);
 
-        swordController.StopAttack();
+        //swordController.StopAttack();
+        hammerController.StopAttack();
         currentHealth -= damage;
         AudioManager.instance.PlaySFX("Hit");
         animator.SetTrigger("Hit");
@@ -258,10 +294,6 @@ public class PlayerController : MonoBehaviour, IDataPersistance
         currentHealth += maxHealth * 0.25f;
     }
 
-    public void IncreaseDamageCap(float amount)
-    {
-        swordController.swordDamage += amount;
-    }
 
     // Handle Input System Events
     public void OnMove(InputAction.CallbackContext context)
@@ -291,7 +323,8 @@ public class PlayerController : MonoBehaviour, IDataPersistance
     {
         if (context.performed)
         {
-            animator.SetTrigger("SwordAttack");
+            // animator.SetTrigger("SwordAttack");
+            animator.SetTrigger("HammerAttack");
         }
     }
 
@@ -333,7 +366,6 @@ public class PlayerController : MonoBehaviour, IDataPersistance
             currentXp = Mathf.RoundToInt(currentXp - requiredXp);
 
             IncreaseHealthCap(level);
-            IncreaseDamageCap(0.5f);
             requiredXp = CalculateRequiredXp();
             levelText.text = "Level " + level;
         }
