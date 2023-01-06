@@ -15,6 +15,7 @@ public class BossController : MonoBehaviour
     public Transform gun;
     private Animator animator;
     public GameObject BulletProjectile;
+    private bool detectSoundPlayed = false;
 
     [Header("Stats")]
     public int enemyLevel = 20;
@@ -93,6 +94,7 @@ public class BossController : MonoBehaviour
         if (inRange)
         {
             transform.position = Vector2.MoveTowards(transform.position, player.position, moveSpeed * Time.deltaTime);
+            PlayTheme();
         }
     }
 
@@ -106,6 +108,32 @@ public class BossController : MonoBehaviour
         if (currentHealth <= 0)
         {
             Dead();
+        }
+    }
+
+    void PlayTheme()
+    {
+        if(detectSoundPlayed == false)
+        // 3 phases
+        if (currentHealth <= maxHealth && currentHealth >= 0.7 * maxHealth)
+        {
+            AudioManager.instance.PlayMusic("Boss-100%");
+            detectSoundPlayed = true;
+        }
+
+        else if (currentHealth < 0.7 * maxHealth && currentHealth >= 0.4 * maxHealth)
+        {
+            AudioManager.instance.PlayMusic("Boss-70%");
+            detectSoundPlayed = true;
+            moveSpeed += 20f;
+            bossDamage += 10f;
+        }
+        else if(currentHealth < 0.4 * maxHealth)
+        {
+            AudioManager.instance.PlayMusic("Boss-40%");
+            detectSoundPlayed = true;
+            moveSpeed += 40f;
+            bossDamage += 20f;
         }
     }
 
@@ -159,7 +187,8 @@ public class BossController : MonoBehaviour
         }
     }
 
-    private IEnumerator PlayVictoryUI(float time){
+    private IEnumerator PlayVictoryUI(float time)
+    {
         yield return new WaitForSeconds(time);
         AudioManager.instance.PauseMusic("Theme");
         AudioManager.instance.PlaySFX("Victory");

@@ -66,7 +66,8 @@ public class PlayerController : MonoBehaviour, IDataPersistance
     public SwordController swordController;
     public HammerController hammerController;
 
-    Vector2 mousePos;
+    [Header("GameOverUI")]
+    public GameObject gameOverUI;
 
     void Start()
     {
@@ -234,6 +235,7 @@ public class PlayerController : MonoBehaviour, IDataPersistance
             canMove = false;
             rb.isKinematic = true;
             StartCoroutine(EnableRigidbody(3f));
+            StartCoroutine(PlayGameOverUI(2f));
         }
     }
 
@@ -419,5 +421,15 @@ public class PlayerController : MonoBehaviour, IDataPersistance
         yield return new WaitForSeconds(waitTime);
         rb.isKinematic = false;
         Respawn();
+    }
+
+    private IEnumerator PlayGameOverUI(float time)
+    {
+        yield return new WaitForSeconds(time);
+        AudioManager.instance.PauseMusic("Theme");
+        AudioManager.instance.PlaySFX("GameOver");
+        gameOverUI.SetActive(true);
+        Cursor.visible = true;
+        Time.timeScale = 0;
     }
 }
