@@ -73,9 +73,12 @@ public class WeaponManager : MonoBehaviour
                 {
                     AudioManager.instance.PlaySFX("Upgrade");
                     activateWeapon.isUpgraded = true;
+
+                    // Update weapon hotkey bar
                     char c = activateWeapon.name[6];
                     if(c.Equals('1')) WeaponSlots[0].sprite = activateWeapon.wSprite;
                     else WeaponSlots[1].sprite = activateWeapon.wSprite;
+
                     remainingPoints -= 1;
                 }
                 else

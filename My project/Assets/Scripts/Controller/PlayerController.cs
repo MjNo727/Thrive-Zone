@@ -20,6 +20,8 @@ public class PlayerController : MonoBehaviour, IDataPersistance
     private PlayerInputActions inputActions;
     Rigidbody2D rb;
     public float dashDistance = 80f;
+    public float cooldownDashTime = 1.5f;
+    float lastDash;
     private bool isDashing, isAttacking;
 
     [Header("Healthbar")]
@@ -62,9 +64,12 @@ public class PlayerController : MonoBehaviour, IDataPersistance
     public ParticleSystem levelUp, levelUpSplash;
 
     [Header("Attack")]
-    public Transform swordHitbox, hammerHitbox;
+    public Transform swordHitbox;
+    public Transform hammerHitbox;
+    public Transform scytheHitbox;
     public SwordController swordController;
     public HammerController hammerController;
+    public ScytheController scytheController;
 
     [Header("GameOverUI")]
     public GameObject gameOverUI;
@@ -122,6 +127,11 @@ public class PlayerController : MonoBehaviour, IDataPersistance
             // Handle Dash
             if (isDashing)
             {
+                if (Time.time - lastDash < cooldownDashTime)
+                {
+                    return;
+                }
+                lastDash = Time.time;
                 animator.SetTrigger("Slide");
                 dust.Play();
                 Vector2 Position = transform.position;
@@ -137,7 +147,10 @@ public class PlayerController : MonoBehaviour, IDataPersistance
                 // SwordAttack();
 
                 // ===============Hammer====================
-                HammerAttack();
+                // HammerAttack();
+
+                // ===============Scythe====================
+                ScytheAttack();
 
                 // ===============Gun======================
                 // GunAttack();
@@ -160,7 +173,7 @@ public class PlayerController : MonoBehaviour, IDataPersistance
     {
         if (lookDirection.x > 0)
         {
-            swordController.AttackRight(); 
+            swordController.AttackRight();
             //play sfx
             AudioManager.instance.PlaySFX("Sword");
         }
@@ -170,12 +183,14 @@ public class PlayerController : MonoBehaviour, IDataPersistance
             //play sfx
             AudioManager.instance.PlaySFX("Sword");
         }
-        else if(lookDirection.y > 0){
+        else if (lookDirection.y > 0)
+        {
             swordController.AttackUp();
             //play sfx
             AudioManager.instance.PlaySFX("Sword");
         }
-        else if(lookDirection.y < 0){
+        else if (lookDirection.y < 0)
+        {
             swordController.AttackDown();
             //play sfx
             AudioManager.instance.PlaySFX("Sword");
@@ -186,7 +201,7 @@ public class PlayerController : MonoBehaviour, IDataPersistance
     {
         if (lookDirection.x > 0)
         {
-            hammerController.AttackRight(); 
+            hammerController.AttackRight();
             //play sfx
             AudioManager.instance.PlaySFX("Hammer");
         }
@@ -196,33 +211,68 @@ public class PlayerController : MonoBehaviour, IDataPersistance
             //play sfx
             AudioManager.instance.PlaySFX("Hammer");
         }
-        else if(lookDirection.y > 0){
+        else if (lookDirection.y > 0)
+        {
             hammerController.AttackUp();
             //play sfx
             AudioManager.instance.PlaySFX("Hammer");
         }
-        else if(lookDirection.y < 0){
+        else if (lookDirection.y < 0)
+        {
             hammerController.AttackDown();
             //play sfx
             AudioManager.instance.PlaySFX("Hammer");
         }
     }
 
-    public void EndSwordAttack(){
+    public void ScytheAttack()
+    {
+        if (lookDirection.x > 0)
+        {
+            scytheController.AttackRight();
+            //play sfx
+            AudioManager.instance.PlaySFX("Scythe");
+        }
+        else if (lookDirection.x < 0)
+        {
+            scytheController.AttackLeft();
+            //play sfx
+            AudioManager.instance.PlaySFX("Scythe");
+        }
+        else if (lookDirection.y > 0)
+        {
+            scytheController.AttackUp();
+            //play sfx
+            AudioManager.instance.PlaySFX("Scythe");
+        }
+        else if (lookDirection.y < 0)
+        {
+            scytheController.AttackDown();
+            //play sfx
+            AudioManager.instance.PlaySFX("Scythe");
+        }
+    }
+
+    public void EndSwordAttack()
+    {
         swordController.StopAttack();
     }
 
-    public void EndHammerAttack(){
+    public void EndHammerAttack()
+    {
         hammerController.StopAttack();
+    }
+
+    public void EndScytheAttack()
+    {
+        scytheController.StopAttack();
     }
 
     public void Hurt(float damage)
     {
-        //Set health bar UI
-        //healthBar.setHealth(currentHealth);
-
         //swordController.StopAttack();
-        hammerController.StopAttack();
+        //hammerController.StopAttack();
+        scytheController.StopAttack();
         currentHealth -= damage;
         AudioManager.instance.PlaySFX("Hit");
         animator.SetTrigger("Hit");
@@ -326,7 +376,8 @@ public class PlayerController : MonoBehaviour, IDataPersistance
         if (context.performed)
         {
             // animator.SetTrigger("SwordAttack");
-            animator.SetTrigger("HammerAttack");
+            // animator.SetTrigger("HammerAttack");
+            animator.SetTrigger("ScytheAttack");
         }
     }
 

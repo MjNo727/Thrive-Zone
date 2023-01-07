@@ -94,7 +94,7 @@ public class BossController : MonoBehaviour
         if (inRange)
         {
             transform.position = Vector2.MoveTowards(transform.position, player.position, moveSpeed * Time.deltaTime);
-            PlayTheme();
+            ChangeStages();
         }
     }
 
@@ -111,7 +111,7 @@ public class BossController : MonoBehaviour
         }
     }
 
-    void PlayTheme()
+    void ChangeStages()
     {
         if(detectSoundPlayed == false)
         // 3 phases
@@ -132,6 +132,8 @@ public class BossController : MonoBehaviour
         {
             AudioManager.instance.PlayMusic("Boss-40%");
             detectSoundPlayed = true;
+            animator.SetBool("isBuffed", true);
+            currentHealth += 0.2f * maxHealth;
             moveSpeed += 40f;
             bossDamage += 20f;
         }
