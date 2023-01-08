@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour, IDataPersistance
     public float dashDistance = 80f;
     public float cooldownDashTime = 1.5f;
     float lastDash;
-    private bool isDashing, isAttacking;
+    private bool isDashing, isMeleeAttacking, isRangeAttacking;
 
     [Header("Healthbar")]
     public float maxHealth = 100f;
@@ -85,7 +85,8 @@ public class PlayerController : MonoBehaviour, IDataPersistance
         inputActions.Player.Move.performed += OnMove;
         inputActions.Player.Move.canceled += OnMove;
         inputActions.Player.Dash.performed += OnDash;
-        inputActions.Player.Attack.performed += OnAttack;
+        inputActions.Player.Fire1.performed += OnFire1;
+        inputActions.Player.Fire2.performed += OnFire2;
 
         frontXpbar.fillAmount = currentXp / requiredXp;
         backXpbar.fillAmount = currentXp / requiredXp;
@@ -141,7 +142,7 @@ public class PlayerController : MonoBehaviour, IDataPersistance
             }
 
             // Handle Attack
-            if (isAttacking)
+            if (isMeleeAttacking)
             {
                 // ===============Sword====================
                 // SwordAttack();
@@ -151,23 +152,24 @@ public class PlayerController : MonoBehaviour, IDataPersistance
 
                 // ===============Scythe====================
                 ScytheAttack();
-
-                // ===============Gun======================
-                // GunAttack();
             }
-
+            if (isRangeAttacking)
+            {
+                // ===============Gun======================
+                GunAttack();
+            }
         }
     }
 
-    void Respawn()
-    {
-        lookDirection = new Vector2(0f, -1f);
-        transform.GetComponent<Renderer>().sortingLayerID = SortingLayer.NameToID("Layer 2");
-        canMove = true;
-        animator.SetBool("isDead", false);
-        currentHealth = maxHealth;
-        transform.position = respawnLocation.position;
-    }
+    // void Respawn()
+    // {
+    //     lookDirection = new Vector2(0f, -1f);
+    //     transform.GetComponent<Renderer>().sortingLayerID = SortingLayer.NameToID("Layer 2");
+    //     canMove = true;
+    //     animator.SetBool("isDead", false);
+    //     currentHealth = maxHealth;
+    //     transform.position = respawnLocation.position;
+    // }
 
     public void SwordAttack()
     {
@@ -226,6 +228,34 @@ public class PlayerController : MonoBehaviour, IDataPersistance
     }
 
     public void ScytheAttack()
+    {
+        if (lookDirection.x > 0)
+        {
+            scytheController.AttackRight();
+            //play sfx
+            AudioManager.instance.PlaySFX("Scythe");
+        }
+        else if (lookDirection.x < 0)
+        {
+            scytheController.AttackLeft();
+            //play sfx
+            AudioManager.instance.PlaySFX("Scythe");
+        }
+        else if (lookDirection.y > 0)
+        {
+            scytheController.AttackUp();
+            //play sfx
+            AudioManager.instance.PlaySFX("Scythe");
+        }
+        else if (lookDirection.y < 0)
+        {
+            scytheController.AttackDown();
+            //play sfx
+            AudioManager.instance.PlaySFX("Scythe");
+        }
+    }
+
+    public void GunAttack()
     {
         if (lookDirection.x > 0)
         {
@@ -371,13 +401,21 @@ public class PlayerController : MonoBehaviour, IDataPersistance
         }
     }
 
-    public void OnAttack(InputAction.CallbackContext context)
+    public void OnFire1(InputAction.CallbackContext context)
     {
         if (context.performed)
         {
             // animator.SetTrigger("SwordAttack");
             // animator.SetTrigger("HammerAttack");
             animator.SetTrigger("ScytheAttack");
+        }
+    }
+
+    public void OnFire2(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            animator.SetTrigger("GunAttack");
         }
     }
 
@@ -471,7 +509,7 @@ public class PlayerController : MonoBehaviour, IDataPersistance
     {
         yield return new WaitForSeconds(waitTime);
         rb.isKinematic = false;
-        Respawn();
+        // Respawn();
     }
 
     private IEnumerator PlayGameOverUI(float time)

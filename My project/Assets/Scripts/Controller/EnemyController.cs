@@ -30,6 +30,8 @@ public class EnemyController : MonoBehaviour
     public SpriteRenderer sr;
     public Color flashColor;
     private Animator animator;
+    [SerializeField]
+    private GameObject floatingTextPrefab;
 
     void Start()
     {
@@ -108,6 +110,7 @@ public class EnemyController : MonoBehaviour
 
     public void takeDamage(float damage)
     {
+        ShowDamage(damage.ToString());
         currentHealth -= damage;
         animator.SetTrigger("Hit");
         Knockback();
@@ -182,6 +185,13 @@ public class EnemyController : MonoBehaviour
         if (player != null && player.currentHealth > 0) // collide with player
         {
             player.Hurt(3);
+        }
+    }
+
+    void ShowDamage(string text){
+        if(floatingTextPrefab){
+            GameObject prefab = Instantiate(floatingTextPrefab, transform.position, Quaternion.identity);
+            prefab.GetComponentInChildren<TextMesh>().text = text;
         }
     }
 }

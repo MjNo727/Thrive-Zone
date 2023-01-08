@@ -6,7 +6,6 @@ public class HammerController : MonoBehaviour
 {
     public Collider2D hammerCollider;
     public float hammerDamage = 5f;
-    public float hammerAttackRate = 2f;
 
     public void AttackRight()
     {

@@ -131,7 +131,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 590739800686867821}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -18.81907, y: -5.088, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -267,6 +267,8 @@ MonoBehaviour:
   numOfFlashes: 4
   sr: {fileID: 7013352852845765976}
   flashColor: {r: 1, g: 0, b: 0, a: 0.56078434}
+  floatingTextPrefab: {fileID: 5868417598809470995, guid: f0b17f553f3835c42b44e77abf1df52c,
+    type: 3}
 --- !u!50 &-314394292446217971
 Rigidbody2D:
   serializedVersion: 4

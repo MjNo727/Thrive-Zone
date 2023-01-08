@@ -16,6 +16,8 @@ public class BossController : MonoBehaviour
     private Animator animator;
     public GameObject BulletProjectile;
     private bool detectSoundPlayed = false;
+    [SerializeField]
+    private GameObject floatingTextPrefab;
 
     [Header("Stats")]
     public int enemyLevel = 20;
@@ -42,7 +44,7 @@ public class BossController : MonoBehaviour
         target = GameObject.FindGameObjectWithTag("Player");
         playerLevel = target.GetComponent<PlayerController>();
 
-        text.text = "<color=red>Level: " + enemyLevel;
+        text.text = "Destronos\n<color=red>Level: " + enemyLevel;
 
         currentHealth = maxHealth;
         healthbar.SetHealth(currentHealth, maxHealth);
@@ -51,6 +53,7 @@ public class BossController : MonoBehaviour
     }
     void Update()
     {
+        //bullet follow
         Vector3 difference = player.position - gun.transform.position;
         float RotZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
         gun.transform.rotation = Quaternion.Euler(0f, 0f, RotZ);
@@ -100,6 +103,7 @@ public class BossController : MonoBehaviour
 
     public void takeDamage(float damage)
     {
+        ShowDamage(damage.ToString());
         currentHealth -= damage;
         healthbar.SetHealth(currentHealth, maxHealth);
 
@@ -113,28 +117,33 @@ public class BossController : MonoBehaviour
 
     void ChangeStages()
     {
-        if(detectSoundPlayed == false)
         // 3 phases
         if (currentHealth <= maxHealth && currentHealth >= 0.7 * maxHealth)
         {
-            AudioManager.instance.PlayMusic("Boss-100%");
-            detectSoundPlayed = true;
+            if (detectSoundPlayed == false)
+            {
+                AudioManager.instance.PlayMusic("Boss");
+                detectSoundPlayed = true;
+            }
         }
 
         else if (currentHealth < 0.7 * maxHealth && currentHealth >= 0.4 * maxHealth)
         {
-            AudioManager.instance.PlayMusic("Boss-70%");
-            detectSoundPlayed = true;
-            moveSpeed += 20f;
+            if (detectSoundPlayed == false)
+            {
+                AudioManager.instance.PlayMusic("Boss");
+                detectSoundPlayed = true;
+            }
             bossDamage += 10f;
         }
-        else if(currentHealth < 0.4 * maxHealth)
+        else if (currentHealth < 0.4 * maxHealth && currentHealth >= 0)
         {
-            AudioManager.instance.PlayMusic("Boss-40%");
-            detectSoundPlayed = true;
             animator.SetBool("isBuffed", true);
-            currentHealth += 0.2f * maxHealth;
-            moveSpeed += 40f;
+            if (detectSoundPlayed == false)
+            {
+                AudioManager.instance.PlayMusic("Boss");
+
+            }
             bossDamage += 20f;
         }
     }
@@ -197,5 +206,12 @@ public class BossController : MonoBehaviour
         victoryMenuUI.SetActive(true);
         Cursor.visible = true;
         Time.timeScale = 0;
+    }
+
+    void ShowDamage(string text){
+        if(floatingTextPrefab){
+            GameObject prefab = Instantiate(floatingTextPrefab, transform.position, Quaternion.identity);
+            prefab.GetComponentInChildren<TextMesh>().text = text;
+        }
     }
 }

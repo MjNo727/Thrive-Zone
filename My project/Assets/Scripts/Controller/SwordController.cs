@@ -6,7 +6,6 @@ public class SwordController : MonoBehaviour
 {
     public Collider2D swordCollider;
     public float swordDamage = 5f;
-    public float swordAttackRate = 2f;
 
     public void AttackRight()
     {

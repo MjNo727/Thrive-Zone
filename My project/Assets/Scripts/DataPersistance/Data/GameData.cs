@@ -12,6 +12,7 @@ public class GameData
     public float playerRequiredExp;
     public int playerCurrentLevel;
     public Vector2 playerCurrentPostion;
+    
     public GameData()
     {
         this.playerCurrentHealth = 100f;
@@ -19,6 +20,6 @@ public class GameData
         this.playerCurrentExp = 0f;
         this.playerRequiredExp = 0f;
         this.playerCurrentLevel = 1;
-        playerCurrentPostion = Vector2.zero;
+        playerCurrentPostion = new Vector2(-20.89f, -2.76f);
     }
 }

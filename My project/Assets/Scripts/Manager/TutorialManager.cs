@@ -7,11 +7,11 @@ public class TutorialManager : MonoBehaviour
 {
     private PlayerInputActions inputActions;
     Vector2 movementInput;
-    bool isAttacking, isDashing;
+    public GameObject dialogBox;
+    bool isMeleeAttacking, isRangeAttacking, isDashing;
     public GameObject[] popUps;
     private int popUpIndex;
     public GameObject spawner;
-    public float waitTime = 2f;
 
     void Start()
     {
@@ -21,57 +21,15 @@ public class TutorialManager : MonoBehaviour
         inputActions.Player.Move.performed += OnMove;
         inputActions.Player.Move.canceled += OnMove;
         inputActions.Player.Dash.performed += OnDash;
-        inputActions.Player.Attack.performed += OnAttack;
+        inputActions.Player.Fire1.performed += OnFire1;
+        inputActions.Player.Fire2.performed += OnFire2;
     }
 
     public void Update()
     {
         if (DataPersistanceManager.instance.isNewGame)
         {
-            for (int i = 0; i < popUps.Length; i++)
-            {
-                if (i == popUpIndex)
-                {
-                    popUps[i].SetActive(true);
-                }
-                else
-                {
-                    popUps[i].SetActive(false);
-                }
-            }
-            if (popUpIndex == 0)
-            {
-                if (movementInput.x > 0.01 || movementInput.y > 0.01)
-                {
-                    if (movementInput.y > 0.01 || movementInput.x > 0.01)
-                        popUpIndex++;
-                }
-            }
-            else if (popUpIndex == 1)
-            {
-                if (isAttacking)
-                {
-                    popUpIndex++;
-                }
-            }
-            else if (popUpIndex == 2)
-            {
-                if (isDashing)
-                {
-                    popUpIndex++;
-                }
-            }
-            else
-            {
-                if (waitTime <= 0)
-                {
-                    spawner.SetActive(true);
-                }
-                else
-                {
-                    waitTime -= Time.deltaTime;
-                }
-            }
+            StartCoroutine(TutorialPopup());
         }
         else
         {
@@ -91,15 +49,27 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
-    public void OnAttack(InputAction.CallbackContext context)
+    public void OnFire1(InputAction.CallbackContext context)
     {
         if (context.performed)
         {
-            isAttacking = true;
+            isMeleeAttacking = true;
         }
         if (context.canceled)
         {
-            isAttacking = false;
+            isMeleeAttacking = false;
+        }
+    }
+
+    public void OnFire2(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            isRangeAttacking = true;
+        }
+        if (context.canceled)
+        {
+            isRangeAttacking = false;
         }
     }
 
@@ -112,6 +82,57 @@ public class TutorialManager : MonoBehaviour
         if (context.canceled)
         {
             isDashing = false;
+        }
+    }
+
+    IEnumerator TutorialPopup()
+    {
+        dialogBox.SetActive(true);
+        yield return new WaitForSeconds(5.5f);
+
+        for (int i = 0; i < popUps.Length; i++)
+        {
+            if (i == popUpIndex)
+            {
+                popUps[i].SetActive(true);
+            }
+            else
+            {
+                popUps[i].SetActive(false);
+            }
+        }
+        if (popUpIndex == 0)
+        {
+            if (movementInput.x != 0 && movementInput.y != 0)
+            {
+                popUpIndex++;
+            }
+        }
+        else if (popUpIndex == 1)
+        {
+            if (isMeleeAttacking)
+            {
+                popUpIndex++;
+            }
+        }
+        else if (popUpIndex == 2)
+        {
+            if (isRangeAttacking)
+            {
+                popUpIndex++;
+            }
+        }
+        else if (popUpIndex == 3)
+        {
+            if (isDashing)
+            {
+                popUpIndex++;
+            }
+        }
+        else
+        {
+            Timer.startTimer = true;
+            spawner.SetActive(true);
         }
     }
 }

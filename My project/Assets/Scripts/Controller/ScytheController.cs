@@ -6,7 +6,6 @@ public class ScytheController : MonoBehaviour
 {
     public Collider2D scytheCollider;
     public float scytheDamage = 20f;
-    public float scytheAttackRate = 2f;
 
     public void AttackRight()
     {

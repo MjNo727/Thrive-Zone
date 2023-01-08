@@ -8,6 +8,7 @@ public class MainMenuController : MonoBehaviour
 {
     [SerializeField] private Button newGameBtn;
     [SerializeField] private Button loadGameBtn;
+    public FadeAnimator fadeAnimator;
     private void Start(){
         AudioManager.instance.PlayMusic("MainMenuTheme");
         if (!PlayerPrefs.HasKey("musicVolume"))
@@ -26,7 +27,8 @@ public class MainMenuController : MonoBehaviour
     {
         DataPersistanceManager.instance.NewGame();
         DataPersistanceManager.instance.SaveGame();
-        SceneManager.LoadSceneAsync("GameplayScene");
+        // SceneManager.LoadSceneAsync("GameplayScene");
+        fadeAnimator.FadeToScreen("GameplayScene");
     }
 
     public void OnLoadGameClicked()

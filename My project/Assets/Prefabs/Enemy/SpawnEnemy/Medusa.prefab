@@ -402,6 +402,8 @@ MonoBehaviour:
   numOfFlashes: 4
   sr: {fileID: 8537679248316901139}
   flashColor: {r: 0.32164118, g: 0.4528302, b: 0.3178355, a: 0.5764706}
+  floatingTextPrefab: {fileID: 5868417598809470995, guid: f0b17f553f3835c42b44e77abf1df52c,
+    type: 3}
 --- !u!50 &-5712848701620284476
 Rigidbody2D:
   serializedVersion: 4
