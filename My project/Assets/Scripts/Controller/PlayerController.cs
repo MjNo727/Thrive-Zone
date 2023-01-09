@@ -19,9 +19,12 @@ public class PlayerController : MonoBehaviour, IDataPersistance
     public float movementSpeed = 3f;
     private PlayerInputActions inputActions;
     Rigidbody2D rb;
-    public float dashDistance = 80f;
-    public float cooldownDashTime = 1.5f;
-    float lastDash;
+    public float dashDistance = 100f;
+    public float cooldownDashTime = 2f;
+    public float cooldownGunTime = 1.5f;
+    public float cooldownRifleTime = 1f;
+    public float cooldownBowTime = 2f;
+    float nextFire;
     private bool isDashing, isMeleeAttacking, isRangeAttacking;
 
     [Header("Healthbar")]
@@ -68,7 +71,7 @@ public class PlayerController : MonoBehaviour, IDataPersistance
     public Transform hammerHitbox;
     public Transform scytheHitbox;
     public Transform shootingPoint;
-    public GameObject bulletPrefab;
+    public GameObject gunBulletPrefab, rifleBulletPrefab, arrowBulletPrefab;
     public float bulletForce = 300f;
     public SwordController swordController;
     public HammerController hammerController;
@@ -131,17 +134,16 @@ public class PlayerController : MonoBehaviour, IDataPersistance
             // Handle Dash
             if (isDashing)
             {
-                if (Time.time - lastDash < cooldownDashTime)
+                if (Time.time > nextFire)
                 {
-                    return;
+                    nextFire = Time.time + cooldownDashTime;
+                    animator.SetTrigger("Slide");
+                    dust.Play();
+                    Vector2 Position = transform.position;
+                    Position += lookDirection * dashDistance * Time.deltaTime;
+                    rb.MovePosition(Position);
+                    isDashing = false;
                 }
-                lastDash = Time.time;
-                animator.SetTrigger("Slide");
-                dust.Play();
-                Vector2 Position = transform.position;
-                Position += lookDirection * dashDistance * Time.deltaTime;
-                rb.MovePosition(Position);
-                isDashing = false;
             }
 
             // Handle Attack
@@ -160,7 +162,13 @@ public class PlayerController : MonoBehaviour, IDataPersistance
             if (isRangeAttacking)
             {
                 // ===============Gun======================
-                GunAttack();
+                // GunAttack();
+
+                // ===============Rifle======================
+                // RifleAttack();
+
+                // ===============Bow======================
+                ArrowAttack();
             }
         }
     }
@@ -262,32 +270,146 @@ public class PlayerController : MonoBehaviour, IDataPersistance
         isMeleeAttacking = false;
     }
 
-    public void GunAttack()
-    {              
+    public void RifleAttack()
+    {
         if (lookDirection.x > 0)
         {
-            GameObject bulletGO = Instantiate(bulletPrefab, shootingPoint.position, transform.rotation);
-            bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * transform.right);
+            if (Time.time > nextFire)
+            {
+                nextFire = Time.time + cooldownRifleTime;
+                GameObject bulletGO = Instantiate(rifleBulletPrefab, shootingPoint.position, transform.rotation);
+                bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * transform.right);
+                Destroy(bulletGO, 3f);
+            }
+
         }
         if (lookDirection.x < 0)
         {
-            GameObject bulletGO = Instantiate(bulletPrefab, shootingPoint.position, transform.rotation);
-            bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * -transform.right);
+            if (Time.time > nextFire)
+            {
+                nextFire = Time.time + cooldownRifleTime;
+                GameObject bulletGO = Instantiate(rifleBulletPrefab, shootingPoint.position, Quaternion.Euler(0, 180, 0));
+                bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * -transform.right);
+                Destroy(bulletGO, 3f);
+            }
         }
         if (lookDirection.y > 0)
         {
-            GameObject bulletGO = Instantiate(bulletPrefab, shootingPoint.position, Quaternion.Euler(0, 0, -90));
-            bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * transform.up);
+            if (Time.time > nextFire)
+            {
+                nextFire = Time.time + cooldownRifleTime;
+                GameObject bulletGO = Instantiate(rifleBulletPrefab, shootingPoint.position, Quaternion.Euler(0, 0, 90));
+                bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * transform.up);
+                Destroy(bulletGO, 3f);
+            }
         }
         if (lookDirection.y < 0)
         {
-            GameObject bulletGO = Instantiate(bulletPrefab, shootingPoint.position, Quaternion.Euler(0, 0, 90));
-            bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * -transform.up);
+            if (Time.time > nextFire)
+            {
+                nextFire = Time.time + cooldownRifleTime;
+                GameObject bulletGO = Instantiate(rifleBulletPrefab, shootingPoint.position, Quaternion.Euler(0, 0, -90));
+                bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * -transform.up);
+                Destroy(bulletGO, 3f);
+            }
         }
         AudioManager.instance.PlaySFX("Bullet");
         isRangeAttacking = false;
     }
 
+    public void GunAttack()
+    {
+        if (lookDirection.x > 0)
+        {
+            if (Time.time > nextFire)
+            {
+                nextFire = Time.time + cooldownGunTime;
+                GameObject bulletGO = Instantiate(gunBulletPrefab, shootingPoint.position, transform.rotation);
+                bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * transform.right);
+                Destroy(bulletGO, 3f);
+            }
+        }
+        if (lookDirection.x < 0)
+        {
+            if (Time.time > nextFire)
+            {
+                nextFire = Time.time + cooldownGunTime;
+                GameObject bulletGO = Instantiate(gunBulletPrefab, shootingPoint.position, Quaternion.Euler(0, 180, 0));
+                bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * -transform.right);
+                Destroy(bulletGO, 3f);
+            }
+        }
+        if (lookDirection.y > 0)
+        {
+            if (Time.time > nextFire)
+            {
+                nextFire = Time.time + cooldownGunTime;
+                GameObject bulletGO = Instantiate(gunBulletPrefab, shootingPoint.position, Quaternion.Euler(0, 0, 90));
+                bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * transform.up);
+                Destroy(bulletGO, 3f);
+            }
+        }
+        if (lookDirection.y < 0)
+        {
+            if (Time.time > nextFire)
+            {
+                nextFire = Time.time + cooldownGunTime;
+                GameObject bulletGO = Instantiate(gunBulletPrefab, shootingPoint.position, Quaternion.Euler(0, 0, -90));
+                bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * -transform.up);
+                Destroy(bulletGO, 3f);
+            }
+        }
+        AudioManager.instance.PlaySFX("Bullet2");
+        isRangeAttacking = false;
+    }
+
+    public void ArrowAttack()
+    {
+        if (lookDirection.x > 0)
+        {
+            if (Time.time > nextFire)
+            {
+                nextFire = Time.time + cooldownBowTime;
+                GameObject arrowGO = Instantiate(arrowBulletPrefab, shootingPoint.position, Quaternion.Euler(0, 180, 0));
+                arrowGO.GetComponent<Rigidbody2D>().AddForce(500 * transform.right);
+                Destroy(arrowGO, 3f);
+            }
+        }
+        if (lookDirection.x < 0)
+        {
+            if (Time.time > nextFire)
+            {
+                nextFire = Time.time + cooldownBowTime;
+                GameObject arrowGO = Instantiate(arrowBulletPrefab, shootingPoint.position, Quaternion.Euler(0, 0, 0));
+                arrowGO.GetComponent<Rigidbody2D>().AddForce(500 * -transform.right);
+                Destroy(arrowGO, 3f);
+            }
+        }
+        if (lookDirection.y > 0)
+        {
+            if (Time.time > nextFire)
+            {
+                nextFire = Time.time + cooldownBowTime;
+                GameObject arrowGO = Instantiate(arrowBulletPrefab, shootingPoint.position, Quaternion.Euler(0, 0, -90));
+                arrowGO.GetComponent<Rigidbody2D>().AddForce(500 * transform.up);
+                Destroy(arrowGO, 3f);
+            }
+        }
+        if (lookDirection.y < 0)
+        {
+            if (Time.time > nextFire)
+            {
+                nextFire = Time.time + cooldownBowTime;
+                GameObject arrowGO = Instantiate(arrowBulletPrefab, shootingPoint.position, Quaternion.Euler(0, 0, 90));
+                arrowGO.GetComponent<Rigidbody2D>().AddForce(500 * -transform.up);
+                Destroy(arrowGO, 3f);
+            }
+        }
+        AudioManager.instance.PlaySFX("Arrow");
+        isRangeAttacking = false;
+    }
+
+    //====================Animation Event Function==========================
     public void EndSwordAttack()
     {
         swordController.StopAttack();
@@ -303,11 +425,22 @@ public class PlayerController : MonoBehaviour, IDataPersistance
         scytheController.StopAttack();
     }
 
+    public void LockMovement()
+    {
+        canMove = false;
+    }
+
+    public void UnlockMovement()
+    {
+        canMove = true;
+    }
+    // =======================================================================
+
     public void Hurt(float damage)
     {
         //swordController.StopAttack();
         //hammerController.StopAttack();
-        scytheController.StopAttack();
+        //scytheController.StopAttack();
         currentHealth -= damage;
         AudioManager.instance.PlaySFX("Hit");
         animator.SetTrigger("Hit");
@@ -422,7 +555,9 @@ public class PlayerController : MonoBehaviour, IDataPersistance
         if (context.performed)
         {
             isRangeAttacking = true;
-            animator.SetTrigger("GunAttack");
+            // animator.SetTrigger("GunAttack");
+            animator.SetTrigger("BowAttack");
+            // animator.SetTrigger("RifleAttack");
         }
     }
 

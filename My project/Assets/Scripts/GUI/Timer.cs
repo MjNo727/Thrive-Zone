@@ -7,13 +7,12 @@ public class Timer : MonoBehaviour
     public float timeValue;
     public TextMeshProUGUI timerText;
     private bool endTimeBuzzer = false;
-    public static bool startTimer = false;
     public PlayerController player;
     bool teleport = false;
 
     void Update()
     {
-        if(startTimer == true){
+        if(DataPersistanceManager.instance.isNewGame){
             StartTimer();
         }
         DisplayTime(timeValue);

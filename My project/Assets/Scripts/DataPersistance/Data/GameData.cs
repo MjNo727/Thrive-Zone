@@ -20,6 +20,6 @@ public class GameData
         this.playerCurrentExp = 0f;
         this.playerRequiredExp = 0f;
         this.playerCurrentLevel = 1;
-        playerCurrentPostion = new Vector2(-20.89f, -2.76f);
+        playerCurrentPostion = new Vector2(-20.46f, 2.19f);
     }
 }

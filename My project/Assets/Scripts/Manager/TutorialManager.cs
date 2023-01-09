@@ -7,7 +7,7 @@ public class TutorialManager : MonoBehaviour
 {
     private PlayerInputActions inputActions;
     Vector2 movementInput;
-    public GameObject dialogBox;
+    public GameObject dialogBox, dialogBox2;
     bool isMeleeAttacking, isRangeAttacking, isDashing;
     public GameObject[] popUps;
     private int popUpIndex;
@@ -90,6 +90,9 @@ public class TutorialManager : MonoBehaviour
         dialogBox.SetActive(true);
         yield return new WaitForSeconds(5.5f);
 
+        dialogBox2.SetActive(true);
+        yield return new WaitForSeconds(5.5f);
+
         for (int i = 0; i < popUps.Length; i++)
         {
             if (i == popUpIndex)
@@ -131,7 +134,6 @@ public class TutorialManager : MonoBehaviour
         }
         else
         {
-            Timer.startTimer = true;
             spawner.SetActive(true);
         }
     }
