@@ -67,6 +67,9 @@ public class PlayerController : MonoBehaviour, IDataPersistance
     public Transform swordHitbox;
     public Transform hammerHitbox;
     public Transform scytheHitbox;
+    public Transform shootingPoint;
+    public GameObject bulletPrefab;
+    public float bulletForce = 300f;
     public SwordController swordController;
     public HammerController hammerController;
     public ScytheController scytheController;
@@ -145,13 +148,14 @@ public class PlayerController : MonoBehaviour, IDataPersistance
             if (isMeleeAttacking)
             {
                 // ===============Sword====================
-                // SwordAttack();
+                SwordAttack();
 
                 // ===============Hammer====================
                 // HammerAttack();
 
                 // ===============Scythe====================
-                ScytheAttack();
+                // ScytheAttack();
+
             }
             if (isRangeAttacking)
             {
@@ -197,6 +201,7 @@ public class PlayerController : MonoBehaviour, IDataPersistance
             //play sfx
             AudioManager.instance.PlaySFX("Sword");
         }
+        isMeleeAttacking = false;
     }
 
     public void HammerAttack()
@@ -225,6 +230,7 @@ public class PlayerController : MonoBehaviour, IDataPersistance
             //play sfx
             AudioManager.instance.PlaySFX("Hammer");
         }
+        isMeleeAttacking = false;
     }
 
     public void ScytheAttack()
@@ -253,34 +259,33 @@ public class PlayerController : MonoBehaviour, IDataPersistance
             //play sfx
             AudioManager.instance.PlaySFX("Scythe");
         }
+        isMeleeAttacking = false;
     }
 
     public void GunAttack()
-    {
+    {              
         if (lookDirection.x > 0)
         {
-            scytheController.AttackRight();
-            //play sfx
-            AudioManager.instance.PlaySFX("Scythe");
+            GameObject bulletGO = Instantiate(bulletPrefab, shootingPoint.position, transform.rotation);
+            bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * transform.right);
         }
-        else if (lookDirection.x < 0)
+        if (lookDirection.x < 0)
         {
-            scytheController.AttackLeft();
-            //play sfx
-            AudioManager.instance.PlaySFX("Scythe");
+            GameObject bulletGO = Instantiate(bulletPrefab, shootingPoint.position, transform.rotation);
+            bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * -transform.right);
         }
-        else if (lookDirection.y > 0)
+        if (lookDirection.y > 0)
         {
-            scytheController.AttackUp();
-            //play sfx
-            AudioManager.instance.PlaySFX("Scythe");
+            GameObject bulletGO = Instantiate(bulletPrefab, shootingPoint.position, Quaternion.Euler(0, 0, -90));
+            bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * transform.up);
         }
-        else if (lookDirection.y < 0)
+        if (lookDirection.y < 0)
         {
-            scytheController.AttackDown();
-            //play sfx
-            AudioManager.instance.PlaySFX("Scythe");
+            GameObject bulletGO = Instantiate(bulletPrefab, shootingPoint.position, Quaternion.Euler(0, 0, 90));
+            bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * -transform.up);
         }
+        AudioManager.instance.PlaySFX("Bullet");
+        isRangeAttacking = false;
     }
 
     public void EndSwordAttack()
@@ -405,9 +410,10 @@ public class PlayerController : MonoBehaviour, IDataPersistance
     {
         if (context.performed)
         {
-            // animator.SetTrigger("SwordAttack");
+            // isMeleeAttacking = true;
+            animator.SetTrigger("SwordAttack");
             // animator.SetTrigger("HammerAttack");
-            animator.SetTrigger("ScytheAttack");
+            // animator.SetTrigger("ScytheAttack");
         }
     }
 
@@ -415,6 +421,7 @@ public class PlayerController : MonoBehaviour, IDataPersistance
     {
         if (context.performed)
         {
+            isRangeAttacking = true;
             animator.SetTrigger("GunAttack");
         }
     }
