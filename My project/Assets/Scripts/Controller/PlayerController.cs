@@ -20,12 +20,23 @@ public class PlayerController : MonoBehaviour, IDataPersistance
     private PlayerInputActions inputActions;
     Rigidbody2D rb;
     public float dashDistance = 100f;
+    [Header("Cooldown")]
     public float cooldownDashTime = 2f;
-    public float cooldownGunTime = 1.5f;
-    public float cooldownRifleTime = 1f;
-    public float cooldownBowTime = 2f;
-    float nextFire;
-    private bool isDashing, isMeleeAttacking, isRangeAttacking;
+    public float cooldownSwordTime = 1f;
+    public float cooldownHammerTime = 1f;
+    public float cooldownScytheTime = 0.5f;
+    public float cooldownGunTime = 1f;
+    public float cooldownRifleTime = 0.5f;
+    public float cooldownBowTime = 1.5f;
+    float nextDash, nextFire1, nextFire2;
+    private bool isDashing;
+    [SerializeField]
+    private Image imageCooldown1, imageCooldown2;
+    [SerializeField]
+    private TextMeshProUGUI textCooldown1, textCooldown2;
+    private bool isOnCooldown1 = false;
+    private bool isOnCooldown2 = false;
+    private float cooldownTimer = 0;
 
     [Header("Healthbar")]
     public float maxHealth = 100f;
@@ -34,7 +45,6 @@ public class PlayerController : MonoBehaviour, IDataPersistance
     public float chipSpeed = 2f;
     public Image frontHealthbar, backHealthbar;
     public TextMeshProUGUI healthText;
-    //public HealthBar healthBar;
 
     [Header("Expbar")]
     public int level;
@@ -76,15 +86,47 @@ public class PlayerController : MonoBehaviour, IDataPersistance
     public SwordController swordController;
     public HammerController hammerController;
     public ScytheController scytheController;
+    private PlayerWeapons playerWeapons;
+    bool canUseHammer, canUseScythe, canUseGun, canUseRifle;
 
     [Header("GameOverUI")]
     public GameObject gameOverUI;
+
+    void Awake()
+    {
+        playerWeapons = new PlayerWeapons();
+        playerWeapons.OnWeaponUnlocked += PlayerWeapons_OnWeaponUnlocked;
+    }
+
+    private void PlayerWeapons_OnWeaponUnlocked(object sender, PlayerWeapons.OnWeaponUnlockedEventArgs e)
+    {
+        switch (e.weaponType)
+        {
+            case PlayerWeapons.WeaponType.Hammer:
+                canUseHammer = true;
+                break;
+            case PlayerWeapons.WeaponType.Scythe:
+                canUseScythe = true;
+                break;
+            case PlayerWeapons.WeaponType.Gun:
+                canUseGun = true;
+                break;
+            case PlayerWeapons.WeaponType.Rifle:
+                canUseRifle = true;
+                break;
+        }
+    }
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         AudioManager.instance.PlayMusic("Theme");
+        textCooldown1.gameObject.SetActive(false);
+        textCooldown2.gameObject.SetActive(false);
+        imageCooldown1.fillAmount = 0f;
+        imageCooldown2.fillAmount = 0f;
+
         inputActions = new PlayerInputActions();
         inputActions.Player.Enable();
 
@@ -107,8 +149,47 @@ public class PlayerController : MonoBehaviour, IDataPersistance
         UpdateXpUI();
         if (currentXp > requiredXp)
             LevelUp();
+        if (isOnCooldown1) ApplyCooldown1();
+        if (isOnCooldown2) ApplyCooldown2();
     }
 
+    public PlayerWeapons GetPlayerWeapons()
+    {
+        return playerWeapons;
+    }
+
+    //====================Check weapon available===============================
+    // public bool canUseSword()
+    // {
+    //     return playerWeapons.IsWeaponUnlocked(PlayerWeapons.WeaponType.Sword);
+    // }
+
+    // public bool canUseHammer()
+    // {
+    //     return playerWeapons.IsWeaponUnlocked(PlayerWeapons.WeaponType.Hammer);
+    // }
+
+    // public bool canUseScythe()
+    // {
+    //     return playerWeapons.IsWeaponUnlocked(PlayerWeapons.WeaponType.Scythe);
+    // }
+
+    // public bool canUseBow()
+    // {
+    //     return playerWeapons.IsWeaponUnlocked(PlayerWeapons.WeaponType.Bow);
+    // }
+
+    // public bool canUseGun()
+    // {
+    //     return playerWeapons.IsWeaponUnlocked(PlayerWeapons.WeaponType.Gun);
+    // }
+
+    // public bool canUseRifle()
+    // {
+    //     return playerWeapons.IsWeaponUnlocked(PlayerWeapons.WeaponType.Rifle);
+    // }
+
+    //=========================================================================
     private void FixedUpdate()
     {
         if (canMove)
@@ -134,9 +215,9 @@ public class PlayerController : MonoBehaviour, IDataPersistance
             // Handle Dash
             if (isDashing)
             {
-                if (Time.time > nextFire)
+                if (Time.time > nextDash)
                 {
-                    nextFire = Time.time + cooldownDashTime;
+                    nextDash = Time.time + cooldownDashTime;
                     animator.SetTrigger("Slide");
                     dust.Play();
                     Vector2 Position = transform.position;
@@ -145,268 +226,249 @@ public class PlayerController : MonoBehaviour, IDataPersistance
                     isDashing = false;
                 }
             }
-
-            // Handle Attack
-            if (isMeleeAttacking)
-            {
-                // ===============Sword====================
-                SwordAttack();
-
-                // ===============Hammer====================
-                // HammerAttack();
-
-                // ===============Scythe====================
-                // ScytheAttack();
-
-            }
-            if (isRangeAttacking)
-            {
-                // ===============Gun======================
-                // GunAttack();
-
-                // ===============Rifle======================
-                // RifleAttack();
-
-                // ===============Bow======================
-                ArrowAttack();
-            }
         }
     }
 
-    // void Respawn()
-    // {
-    //     lookDirection = new Vector2(0f, -1f);
-    //     transform.GetComponent<Renderer>().sortingLayerID = SortingLayer.NameToID("Layer 2");
-    //     canMove = true;
-    //     animator.SetBool("isDead", false);
-    //     currentHealth = maxHealth;
-    //     transform.position = respawnLocation.position;
-    // }
+    public void UseWeapon1()
+    {
+        if (isOnCooldown1)
+        {
+            // user click spell while in use
+        }
+        else
+        {
+            isOnCooldown1 = true;
+            textCooldown1.gameObject.SetActive(true);
+            // textCooldown2.gameObject.SetActive(true);
+            cooldownTimer = cooldownSwordTime;
+            //cooldownTimer = cooldownHammerTime;
+            //cooldownTimer = cooldownScytheTime;
+            //cooldownTimer = cooldownGunTime;
+            //cooldownTimer = cooldownBowTime;
+            //cooldownTimer = cooldownRifleTime;
+        }
+    }
+
+    public void UseWeapon2()
+    {
+        if (isOnCooldown2)
+        {
+            // user click spell while in use
+        }
+        else
+        {
+            isOnCooldown2 = true;
+            // textCooldown1.gameObject.SetActive(true);
+            textCooldown2.gameObject.SetActive(true);
+            // cooldownTimer = cooldownSwordTime;
+            //cooldownTimer = cooldownHammerTime;
+            //cooldownTimer = cooldownScytheTime;
+            //cooldownTimer = cooldownGunTime;
+            cooldownTimer = cooldownBowTime;
+            //cooldownTimer = cooldownRifleTime;
+        }
+    }
+
+    void ApplyCooldown1()
+    {
+        cooldownTimer -= Time.deltaTime;
+        if (cooldownTimer < 0)
+        {
+            isOnCooldown1 = false;
+            textCooldown1.gameObject.SetActive(false);
+            // textCooldown2.gameObject.SetActive(false);
+            imageCooldown1.fillAmount = 0f;
+            // imageCooldown2.fillAmount = 0f;
+        }
+        else
+        {
+            textCooldown1.text = Mathf.RoundToInt(cooldownTimer).ToString();
+            imageCooldown1.fillAmount = cooldownTimer / cooldownSwordTime;
+            //imageCooldown1.fillAmount = cooldownTimer / cooldownHammerTime;
+            //imageCooldown1.fillAmount = cooldownTimer / cooldownScytheTime;
+            //imageCooldown1.fillAmount = cooldownTimer / cooldownGunTime;
+            //imageCooldown1.fillAmount = cooldownTimer / cooldownBowTime;
+            //imageCooldown1.fillAmount = cooldownTimer / cooldownRifleTime;
+        }
+    }
+
+    void ApplyCooldown2()
+    {
+        cooldownTimer -= Time.deltaTime;
+        if (cooldownTimer < 0)
+        {
+            isOnCooldown2 = false;
+            // textCooldown1.gameObject.SetActive(false);
+            textCooldown2.gameObject.SetActive(false);
+            // imageCooldown1.fillAmount = 0f;
+            imageCooldown2.fillAmount = 0f;
+        }
+        else
+        {
+            textCooldown2.text = Mathf.RoundToInt(cooldownTimer).ToString();
+            //imageCooldown2.fillAmount = cooldownTimer / cooldownSwordTime;
+            //imageCooldown2.fillAmount = cooldownTimer / cooldownHammerTime;
+            //imageCooldown2.fillAmount = cooldownTimer / cooldownScytheTime;
+            //imageCooldown2.fillAmount = cooldownTimer / cooldownGunTime;
+            imageCooldown2.fillAmount = cooldownTimer / cooldownBowTime;
+            //imageCooldown2.fillAmount = cooldownTimer / cooldownRifleTime;
+        }
+    }
 
     public void SwordAttack()
     {
+        AudioManager.instance.PlaySFX("Sword");
+        UseWeapon1();
         if (lookDirection.x > 0)
         {
             swordController.AttackRight();
-            //play sfx
-            AudioManager.instance.PlaySFX("Sword");
         }
         else if (lookDirection.x < 0)
         {
             swordController.AttackLeft();
-            //play sfx
-            AudioManager.instance.PlaySFX("Sword");
         }
         else if (lookDirection.y > 0)
         {
             swordController.AttackUp();
-            //play sfx
-            AudioManager.instance.PlaySFX("Sword");
         }
         else if (lookDirection.y < 0)
         {
             swordController.AttackDown();
-            //play sfx
-            AudioManager.instance.PlaySFX("Sword");
         }
-        isMeleeAttacking = false;
     }
 
     public void HammerAttack()
     {
+        AudioManager.instance.PlaySFX("Hammer");
+        UseWeapon1();
         if (lookDirection.x > 0)
         {
             hammerController.AttackRight();
-            //play sfx
-            AudioManager.instance.PlaySFX("Hammer");
         }
         else if (lookDirection.x < 0)
         {
             hammerController.AttackLeft();
-            //play sfx
-            AudioManager.instance.PlaySFX("Hammer");
         }
         else if (lookDirection.y > 0)
         {
             hammerController.AttackUp();
-            //play sfx
-            AudioManager.instance.PlaySFX("Hammer");
         }
         else if (lookDirection.y < 0)
         {
             hammerController.AttackDown();
-            //play sfx
-            AudioManager.instance.PlaySFX("Hammer");
         }
-        isMeleeAttacking = false;
     }
 
     public void ScytheAttack()
     {
+        AudioManager.instance.PlaySFX("Scythe");
+        UseWeapon1();
         if (lookDirection.x > 0)
         {
             scytheController.AttackRight();
-            //play sfx
-            AudioManager.instance.PlaySFX("Scythe");
         }
         else if (lookDirection.x < 0)
         {
             scytheController.AttackLeft();
-            //play sfx
-            AudioManager.instance.PlaySFX("Scythe");
         }
         else if (lookDirection.y > 0)
         {
             scytheController.AttackUp();
-            //play sfx
-            AudioManager.instance.PlaySFX("Scythe");
         }
         else if (lookDirection.y < 0)
         {
             scytheController.AttackDown();
-            //play sfx
-            AudioManager.instance.PlaySFX("Scythe");
         }
-        isMeleeAttacking = false;
     }
 
     public void RifleAttack()
     {
+        AudioManager.instance.PlaySFX("Bullet");
+        UseWeapon2();
         if (lookDirection.x > 0)
         {
-            if (Time.time > nextFire)
-            {
-                nextFire = Time.time + cooldownRifleTime;
-                GameObject bulletGO = Instantiate(rifleBulletPrefab, shootingPoint.position, transform.rotation);
-                bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * transform.right);
-                Destroy(bulletGO, 3f);
-            }
-
+            GameObject bulletGO = Instantiate(rifleBulletPrefab, shootingPoint.position, transform.rotation);
+            bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * transform.right);
+            Destroy(bulletGO, 3f);
         }
         if (lookDirection.x < 0)
         {
-            if (Time.time > nextFire)
-            {
-                nextFire = Time.time + cooldownRifleTime;
-                GameObject bulletGO = Instantiate(rifleBulletPrefab, shootingPoint.position, Quaternion.Euler(0, 180, 0));
-                bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * -transform.right);
-                Destroy(bulletGO, 3f);
-            }
+            GameObject bulletGO = Instantiate(rifleBulletPrefab, shootingPoint.position, Quaternion.Euler(0, 180, 0));
+            bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * -transform.right);
+            Destroy(bulletGO, 3f);
         }
         if (lookDirection.y > 0)
         {
-            if (Time.time > nextFire)
-            {
-                nextFire = Time.time + cooldownRifleTime;
-                GameObject bulletGO = Instantiate(rifleBulletPrefab, shootingPoint.position, Quaternion.Euler(0, 0, 90));
-                bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * transform.up);
-                Destroy(bulletGO, 3f);
-            }
+            GameObject bulletGO = Instantiate(rifleBulletPrefab, shootingPoint.position, Quaternion.Euler(0, 0, 90));
+            bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * transform.up);
+            Destroy(bulletGO, 3f);
         }
         if (lookDirection.y < 0)
         {
-            if (Time.time > nextFire)
-            {
-                nextFire = Time.time + cooldownRifleTime;
-                GameObject bulletGO = Instantiate(rifleBulletPrefab, shootingPoint.position, Quaternion.Euler(0, 0, -90));
-                bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * -transform.up);
-                Destroy(bulletGO, 3f);
-            }
+            GameObject bulletGO = Instantiate(rifleBulletPrefab, shootingPoint.position, Quaternion.Euler(0, 0, -90));
+            bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * -transform.up);
+            Destroy(bulletGO, 3f);
         }
-        AudioManager.instance.PlaySFX("Bullet");
-        isRangeAttacking = false;
     }
 
     public void GunAttack()
     {
+        AudioManager.instance.PlaySFX("Bullet2");
+        UseWeapon2();
         if (lookDirection.x > 0)
         {
-            if (Time.time > nextFire)
-            {
-                nextFire = Time.time + cooldownGunTime;
-                GameObject bulletGO = Instantiate(gunBulletPrefab, shootingPoint.position, transform.rotation);
-                bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * transform.right);
-                Destroy(bulletGO, 3f);
-            }
+            GameObject bulletGO = Instantiate(gunBulletPrefab, shootingPoint.position, transform.rotation);
+            bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * transform.right);
+            Destroy(bulletGO, 3f);
         }
         if (lookDirection.x < 0)
         {
-            if (Time.time > nextFire)
-            {
-                nextFire = Time.time + cooldownGunTime;
-                GameObject bulletGO = Instantiate(gunBulletPrefab, shootingPoint.position, Quaternion.Euler(0, 180, 0));
-                bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * -transform.right);
-                Destroy(bulletGO, 3f);
-            }
+            GameObject bulletGO = Instantiate(gunBulletPrefab, shootingPoint.position, Quaternion.Euler(0, 180, 0));
+            bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * -transform.right);
+            Destroy(bulletGO, 3f);
         }
         if (lookDirection.y > 0)
         {
-            if (Time.time > nextFire)
-            {
-                nextFire = Time.time + cooldownGunTime;
-                GameObject bulletGO = Instantiate(gunBulletPrefab, shootingPoint.position, Quaternion.Euler(0, 0, 90));
-                bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * transform.up);
-                Destroy(bulletGO, 3f);
-            }
+            GameObject bulletGO = Instantiate(gunBulletPrefab, shootingPoint.position, Quaternion.Euler(0, 0, 90));
+            bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * transform.up);
+            Destroy(bulletGO, 3f);
         }
         if (lookDirection.y < 0)
         {
-            if (Time.time > nextFire)
-            {
-                nextFire = Time.time + cooldownGunTime;
-                GameObject bulletGO = Instantiate(gunBulletPrefab, shootingPoint.position, Quaternion.Euler(0, 0, -90));
-                bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * -transform.up);
-                Destroy(bulletGO, 3f);
-            }
+            GameObject bulletGO = Instantiate(gunBulletPrefab, shootingPoint.position, Quaternion.Euler(0, 0, -90));
+            bulletGO.GetComponent<Rigidbody2D>().AddForce(500 * -transform.up);
+            Destroy(bulletGO, 3f);
         }
-        AudioManager.instance.PlaySFX("Bullet2");
-        isRangeAttacking = false;
     }
 
-    public void ArrowAttack()
+    public void BowAttack()
     {
+        AudioManager.instance.PlaySFX("Arrow");
+        UseWeapon2();
         if (lookDirection.x > 0)
         {
-            if (Time.time > nextFire)
-            {
-                nextFire = Time.time + cooldownBowTime;
-                GameObject arrowGO = Instantiate(arrowBulletPrefab, shootingPoint.position, Quaternion.Euler(0, 180, 0));
-                arrowGO.GetComponent<Rigidbody2D>().AddForce(500 * transform.right);
-                Destroy(arrowGO, 3f);
-            }
+            GameObject arrowGO = Instantiate(arrowBulletPrefab, shootingPoint.position, Quaternion.Euler(0, 180, 0));
+            arrowGO.GetComponent<Rigidbody2D>().AddForce(500 * transform.right);
+            Destroy(arrowGO, 3f);
         }
         if (lookDirection.x < 0)
         {
-            if (Time.time > nextFire)
-            {
-                nextFire = Time.time + cooldownBowTime;
-                GameObject arrowGO = Instantiate(arrowBulletPrefab, shootingPoint.position, Quaternion.Euler(0, 0, 0));
-                arrowGO.GetComponent<Rigidbody2D>().AddForce(500 * -transform.right);
-                Destroy(arrowGO, 3f);
-            }
+            GameObject arrowGO = Instantiate(arrowBulletPrefab, shootingPoint.position, Quaternion.Euler(0, 0, 0));
+            arrowGO.GetComponent<Rigidbody2D>().AddForce(500 * -transform.right);
+            Destroy(arrowGO, 3f);
         }
         if (lookDirection.y > 0)
         {
-            if (Time.time > nextFire)
-            {
-                nextFire = Time.time + cooldownBowTime;
-                GameObject arrowGO = Instantiate(arrowBulletPrefab, shootingPoint.position, Quaternion.Euler(0, 0, -90));
-                arrowGO.GetComponent<Rigidbody2D>().AddForce(500 * transform.up);
-                Destroy(arrowGO, 3f);
-            }
+            GameObject arrowGO = Instantiate(arrowBulletPrefab, shootingPoint.position, Quaternion.Euler(0, 0, -90));
+            arrowGO.GetComponent<Rigidbody2D>().AddForce(500 * transform.up);
+            Destroy(arrowGO, 3f);
         }
         if (lookDirection.y < 0)
         {
-            if (Time.time > nextFire)
-            {
-                nextFire = Time.time + cooldownBowTime;
-                GameObject arrowGO = Instantiate(arrowBulletPrefab, shootingPoint.position, Quaternion.Euler(0, 0, 90));
-                arrowGO.GetComponent<Rigidbody2D>().AddForce(500 * -transform.up);
-                Destroy(arrowGO, 3f);
-            }
+            GameObject arrowGO = Instantiate(arrowBulletPrefab, shootingPoint.position, Quaternion.Euler(0, 0, 90));
+            arrowGO.GetComponent<Rigidbody2D>().AddForce(500 * -transform.up);
+            Destroy(arrowGO, 3f);
         }
-        AudioManager.instance.PlaySFX("Arrow");
-        isRangeAttacking = false;
     }
 
     //====================Animation Event Function==========================
@@ -438,9 +500,10 @@ public class PlayerController : MonoBehaviour, IDataPersistance
 
     public void Hurt(float damage)
     {
-        //swordController.StopAttack();
-        //hammerController.StopAttack();
-        //scytheController.StopAttack();
+        swordController.StopAttack();
+        hammerController.StopAttack();
+        scytheController.StopAttack();
+
         currentHealth -= damage;
         AudioManager.instance.PlaySFX("Hit");
         animator.SetTrigger("Hit");
@@ -543,10 +606,30 @@ public class PlayerController : MonoBehaviour, IDataPersistance
     {
         if (context.performed)
         {
-            // isMeleeAttacking = true;
-            animator.SetTrigger("SwordAttack");
-            // animator.SetTrigger("HammerAttack");
-            // animator.SetTrigger("ScytheAttack");
+            if (canUseScythe == true)
+            {
+                if (Time.time > nextFire1)
+                {
+                    nextFire1 = Time.time + cooldownScytheTime;
+                    animator.SetTrigger("ScytheAttack");
+                }
+            }
+            else if (canUseHammer == true)
+            {
+                if (Time.time > nextFire1)
+                {
+                    nextFire1 = Time.time + cooldownHammerTime;
+                    animator.SetTrigger("HammerAttack");
+                }
+            }
+            else
+            {
+                if (Time.time > nextFire1)
+                {
+                    nextFire1 = Time.time + cooldownSwordTime;
+                    animator.SetTrigger("SwordAttack");
+                }
+            }
         }
     }
 
@@ -554,10 +637,30 @@ public class PlayerController : MonoBehaviour, IDataPersistance
     {
         if (context.performed)
         {
-            isRangeAttacking = true;
-            // animator.SetTrigger("GunAttack");
-            animator.SetTrigger("BowAttack");
-            // animator.SetTrigger("RifleAttack");
+            if (canUseRifle == true)
+            {
+                if (Time.time > nextFire2)
+                {
+                    nextFire2 = Time.time + cooldownRifleTime;
+                    animator.SetTrigger("RifleAttack");
+                }
+            }
+            else if (canUseGun == true)
+            {
+                if (Time.time > nextFire2)
+                {
+                    nextFire2 = Time.time + cooldownGunTime;
+                    animator.SetTrigger("GunAttack");
+                }
+            }
+            else
+            {
+                if (Time.time > nextFire2)
+                {
+                    nextFire2 = Time.time + cooldownBowTime;
+                    animator.SetTrigger("BowAttack");
+                }
+            }
         }
     }
 
@@ -618,8 +721,6 @@ public class PlayerController : MonoBehaviour, IDataPersistance
         this.requiredXp = data.playerRequiredExp;
         this.currentXp = data.playerCurrentExp;
         this.level = data.playerCurrentLevel;
-        //Set health bar to saved current health
-        //healthBar.setHealth(currentHealth);
     }
 
     public void SaveData(GameData data)

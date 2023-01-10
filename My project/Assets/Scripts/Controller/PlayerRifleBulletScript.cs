@@ -12,17 +12,20 @@ public class PlayerRifleBulletScript : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    private void OnTriggerEnter2D(Collider2D collision){
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
         EnemyController enemy = collision.GetComponent<EnemyController>();
         BossController boss = collision.GetComponent<BossController>();
-        if(enemy != null){
+        if (enemy != null)
+        {
             enemy.takeDamage(rifleDamage);
             Destroy(gameObject);
-        } 
+        }
         if (boss != null)
         {
             boss.takeDamage(rifleDamage);
             Destroy(gameObject);
         }
+        Destroy(gameObject, 1.5f);
     }
 }
