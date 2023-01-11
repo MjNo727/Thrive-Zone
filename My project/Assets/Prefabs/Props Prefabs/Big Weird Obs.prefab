@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6570798022363956362}
   - component: {fileID: 5192717983576620684}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: desert_85
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -70,9 +70,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1869315837
-  m_SortingLayer: 1
-  m_SortingOrder: 2
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
   m_Sprite: {fileID: -8270106941715750933, guid: 0ece8860f6ff7b949bcc603e99fefe92,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -94,9 +94,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3531750462617108375}
-  - component: {fileID: 2470873034017965266}
-  - component: {fileID: 5263204806715110436}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Big Weird Obs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -121,58 +119,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!50 &2470873034017965266
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2516045789857024375}
-  m_BodyType: 2
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
---- !u!60 &5263204806715110436
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2516045789857024375}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -0.3683033, y: 0.35843754}
-      - {x: -1.3181076, y: -0.09610939}
-      - {x: -1.6044989, y: -0.59392285}
-      - {x: -0.5877852, y: -0.73773277}
-      - {x: 0.10067332, y: -0.27438235}
-      - {x: 0.11940098, y: 0.07140154}
 --- !u!1 &3665691520379371431
 GameObject:
   m_ObjectHideFlags: 0
@@ -183,7 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8039606703009286813}
   - component: {fileID: 2962003824461743819}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: desert_73
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -243,9 +189,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -44025399
-  m_SortingLayer: 2
-  m_SortingOrder: 2
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
   m_Sprite: {fileID: 867984542661781456, guid: 0ece8860f6ff7b949bcc603e99fefe92, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -267,7 +213,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2115030313006644324}
   - component: {fileID: 7697983056993211592}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: desert_84
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -327,9 +273,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1869315837
-  m_SortingLayer: 1
-  m_SortingOrder: 2
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
   m_Sprite: {fileID: -397784250573409116, guid: 0ece8860f6ff7b949bcc603e99fefe92,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

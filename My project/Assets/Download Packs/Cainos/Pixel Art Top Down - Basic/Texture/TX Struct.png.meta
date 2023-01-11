@@ -662,69 +662,6 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
-    - serializedVersion: 2
-      name: TX Struct_0
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 123
-        width: 8
-        height: 96
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: bbbf4d6def97c0e4da818e9c5f8e23e5
-      internalID: 423010133
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TX Struct_1
-      rect:
-        serializedVersion: 2
-        x: 128
-        y: 123
-        width: 8
-        height: 96
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6e9c29d29b132a34aa90946460a22501
-      internalID: 1402769803
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TX Struct_2
-      rect:
-        serializedVersion: 2
-        x: 40
-        y: 123
-        width: 96
-        height: 96
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4207323c9a2fd024c8b4d5a691192928
-      internalID: 1603590600
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -744,11 +681,9 @@ TextureImporter:
       TX Stairs Broken M M: 21300030
       TX Stairs Broken L M: 21300036
       TX Stairs Broken R L: 21300040
-      TX Struct_1: 1402769803
       TX Stairs M R: 21300002
       TX Struct Gate T1 T: 21300028
       TX Stairs Broken R R: 21300044
-      TX Struct_0: 423010133
       TX Stairs M L: 21300000
       TX Stairs L L: 21300010
       TX Stairs L M: 21300014
@@ -758,7 +693,6 @@ TextureImporter:
       TX Stairs Broken M R: 21300032
       TX Stairs R R: 21300024
       TX Struct Gate T1 B: 21300026
-      TX Struct_2: 1603590600
       TX Stairs Broken M L: 21300046
       TX Struct Gate T2 T: 21300016
   spritePackingTag: 
