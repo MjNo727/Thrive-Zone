@@ -39,6 +39,38 @@ public class PlayerWeapons
         return unlockedWeaponTypeList.Contains(weaponType);
     }
 
+    public bool CanUnlockMelee(WeaponType weaponType){
+        WeaponType weaponRequirement = GetWeaponRequirementMelee(weaponType);
+        if (weaponRequirement != WeaponType.Sword)
+        {
+            if (IsWeaponUnlocked(weaponRequirement))
+            {
+                return true;
+            }
+            else return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    public bool CanUnlockRange(WeaponType weaponType){
+        WeaponType weaponRequirement = GetWeaponRequirementRange(weaponType);
+        if (weaponRequirement != WeaponType.Bow)
+        {
+            if (IsWeaponUnlocked(weaponRequirement))
+            {
+                return true;
+            }
+            else return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
     public WeaponType GetWeaponRequirementMelee(WeaponType weaponType)
     {
         switch (weaponType)
@@ -61,39 +93,19 @@ public class PlayerWeapons
 
     public bool TryUnlockWeaponMelee(WeaponType weaponType)
     {
-        WeaponType weaponRequirement = GetWeaponRequirementMelee(weaponType);
-        if (weaponRequirement != WeaponType.Sword)
-        {
-            if (IsWeaponUnlocked(weaponRequirement))
-            {
-                UnlockWeapon(weaponType);
-                return true;
-            }
-            else return false;
-        }
-        else
-        {
+        if(CanUnlockMelee(weaponType)){
             UnlockWeapon(weaponType);
             return true;
         }
+        else return false;
     }
 
     public bool TryUnlockWeaponRange(WeaponType weaponType)
     {
-        WeaponType weaponRequirement = GetWeaponRequirementRange(weaponType);
-        if (weaponRequirement != WeaponType.Bow)
-        {
-            if (IsWeaponUnlocked(weaponRequirement))
-            {
-                UnlockWeapon(weaponType);
-                return true;
-            }
-            else return false;
-        }
-        else
-        {
+        if(CanUnlockRange(weaponType)){
             UnlockWeapon(weaponType);
             return true;
         }
+        else return false;
     }
 }

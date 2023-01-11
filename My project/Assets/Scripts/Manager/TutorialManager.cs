@@ -8,7 +8,7 @@ public class TutorialManager : MonoBehaviour
     private PlayerInputActions inputActions;
     Vector2 movementInput;
     public GameObject dialogBox, dialogBox2;
-    bool isMeleeAttacking, isRangeAttacking, isDashing;
+    bool isMeleeAttacking, isRangeAttacking, isDashing, isOpen;
     public GameObject[] popUps;
     private int popUpIndex;
     public GameObject spawner;
@@ -17,12 +17,14 @@ public class TutorialManager : MonoBehaviour
     {
         inputActions = new PlayerInputActions();
         inputActions.Player.Enable();
+        inputActions.UI.Enable();
 
         inputActions.Player.Move.performed += OnMove;
         inputActions.Player.Move.canceled += OnMove;
         inputActions.Player.Dash.performed += OnDash;
         inputActions.Player.Fire1.performed += OnFire1;
         inputActions.Player.Fire2.performed += OnFire2;
+        inputActions.UI.WeaponTree.performed += OnWeaponTree;
     }
 
     public void Update()
@@ -85,6 +87,12 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
+    public void OnWeaponTree(InputAction.CallbackContext context){
+        if(context.performed){
+            isOpen = true;
+        }
+    }
+
     IEnumerator TutorialPopup()
     {
         dialogBox.SetActive(true);
@@ -132,8 +140,14 @@ public class TutorialManager : MonoBehaviour
                 popUpIndex++;
             }
         }
+        else if(popUpIndex == 4){
+            if(isOpen){
+                popUpIndex++;
+            }
+        }
         else
         {
+            Timer.instance.StartTimer();
             spawner.SetActive(true);
         }
     }

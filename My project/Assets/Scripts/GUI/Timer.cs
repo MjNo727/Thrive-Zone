@@ -4,17 +4,20 @@ using UnityEngine;
 using TMPro;
 public class Timer : MonoBehaviour
 {
+    public static Timer instance;
     public float timeValue;
     public TextMeshProUGUI timerText;
     private bool endTimeBuzzer = false;
     public PlayerController player;
     bool teleport = false;
 
+    void Awake()
+    {
+        instance = this;
+    }
+
     void Update()
     {
-        if(DataPersistanceManager.instance.isNewGame){
-            StartTimer();
-        }
         DisplayTime(timeValue);
     }
 
@@ -29,7 +32,7 @@ public class Timer : MonoBehaviour
         timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
-    void StartTimer()
+    public void StartTimer()
     {
         if (timeValue > 0)
         {
@@ -42,8 +45,6 @@ public class Timer : MonoBehaviour
                     endTimeBuzzer = true;
                 }
             }
-            // Debug.Log(timeValue.ToString("F1"));
-
         }
         else
         {

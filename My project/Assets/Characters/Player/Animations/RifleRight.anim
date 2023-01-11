@@ -234,7 +234,7 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.1
-    functionName: 
+    functionName: RifleAttack
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
