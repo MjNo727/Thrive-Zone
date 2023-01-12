@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-public class Timer : MonoBehaviour
+public class Timer : MonoBehaviour, IDataPersistance
 {
     public static Timer instance;
     public float timeValue;
@@ -56,5 +56,15 @@ public class Timer : MonoBehaviour
                 teleport = true;
             }
         }
+    }
+
+    public void LoadData(GameData data)
+    {
+        this.timeValue = data.currentTimeOnTimer;
+    }
+
+    public void SaveData(GameData data)
+    {
+        data.currentTimeOnTimer = this.timeValue;
     }
 }

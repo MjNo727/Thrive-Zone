@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerGunBulletScript : MonoBehaviour
 {
     private Rigidbody2D rb;
-    public float gunDamage = 10f;
+    public float gunDamage = 15f;
 
     void Start()
     {

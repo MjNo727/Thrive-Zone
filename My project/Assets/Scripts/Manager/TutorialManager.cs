@@ -35,6 +35,7 @@ public class TutorialManager : MonoBehaviour
         }
         else
         {
+            Timer.instance.StartTimer();
             spawner.SetActive(true);
         }
     }

@@ -15,11 +15,15 @@ public class UI_SkillTree : MonoBehaviour
     private WeaponUnlockPath2[] weaponUnlockPathArray2;
     [SerializeField] private Sprite lineSprite;
     [SerializeField] private Sprite lineSpriteGlow;
+
+    public static UI_SkillTree instance;
     private PlayerWeapons playerWeapons;
     private List<WeaponBtnS1> weaponBtnListS1;
     private List<WeaponBtnS2> weaponBtnListS2;
+    private TMPro.TextMeshProUGUI upgradePointsText;
+    public Image weapon1, weapon2;
     public PlayerInputActions playerInput;
-    public InputAction openSkillTree;
+    private InputAction openSkillTree;
     private CanvasGroup canvasGroup;
     public static bool isOpened = false;
     private void OnEnable()
@@ -34,17 +38,19 @@ public class UI_SkillTree : MonoBehaviour
     }
     private void Awake()
     {
+        instance = this;
+        upgradePointsText = transform.Find("UpgradePoints").GetComponent<TMPro.TextMeshProUGUI>();
         playerInput = new PlayerInputActions();
         canvasGroup = GetComponent<CanvasGroup>();
 
         CloseWeaponTreeMenu();
 
-        Tooltip.AddTooltip(transform.Find("Weapon1_0"), "Sword (Base Attack = 5)");
-        Tooltip.AddTooltip(transform.Find("Weapon1_1"), "Hammer (Base Attack = 10)");
-        Tooltip.AddTooltip(transform.Find("Weapon1_2"), "Scythe (Base Attack = 20)");
-        Tooltip.AddTooltip(transform.Find("Weapon2_0"), "Bow (Base Attack = 5)");
-        Tooltip.AddTooltip(transform.Find("Weapon2_1"), "Gun (Base Attack = 10)");
-        Tooltip.AddTooltip(transform.Find("Weapon2_2"), "Rifle (Base Attack = 20)");
+        Tooltip.AddTooltip(transform.Find("Weapon1_0"), "Sword (Base Attack = 10)");
+        Tooltip.AddTooltip(transform.Find("Weapon1_1"), "Hammer (Base Attack = 20)");
+        Tooltip.AddTooltip(transform.Find("Weapon1_2"), "Scythe (Base Attack = 40)");
+        Tooltip.AddTooltip(transform.Find("Weapon2_0"), "Bow (Base Attack = 7)");
+        Tooltip.AddTooltip(transform.Find("Weapon2_1"), "Gun (Base Attack = 15)");
+        Tooltip.AddTooltip(transform.Find("Weapon2_2"), "Rifle (Base Attack = 22)");
     }
     public void SetPlayerWeapons(PlayerWeapons playerWeapons)
     {
@@ -56,14 +62,27 @@ public class UI_SkillTree : MonoBehaviour
         weaponBtnListS2.Add(new WeaponBtnS2(transform.Find("Weapon2_1"), playerWeapons, PlayerWeapons.WeaponType.Gun, skillLockedMaterial));
         weaponBtnListS2.Add(new WeaponBtnS2(transform.Find("Weapon2_2"), playerWeapons, PlayerWeapons.WeaponType.Rifle, skillLockedMaterial));
         playerWeapons.OnWeaponUnlocked += PlayerWeapons_OnWeaponUnlocked;
+        playerWeapons.OnUpgradePointsChanged += PlayerWeapons_OnUpgradePointsChanged;
+
         UpdateVisualsS1();
         UpdateVisualsS2();
+        UpdateUpgradePoints();
     }
 
     private void PlayerWeapons_OnWeaponUnlocked(object sender, PlayerWeapons.OnWeaponUnlockedEventArgs e)
     {
         UpdateVisualsS1();
         UpdateVisualsS2();
+    }
+
+    private void PlayerWeapons_OnUpgradePointsChanged(object sender, System.EventArgs e)
+    {
+        UpdateUpgradePoints();
+    }
+
+    private void UpdateUpgradePoints()
+    {
+        upgradePointsText.SetText(playerWeapons.GetUpgradePoints().ToString());
     }
 
     private void WeaponTree(InputAction.CallbackContext context)
@@ -148,16 +167,19 @@ public class UI_SkillTree : MonoBehaviour
                     linkImage.color = Color.white;
                     linkImage.sprite = lineSpriteGlow;
                 }
+
             }
         }
     }
 
-    private class WeaponBtnS1
+    public class WeaponBtnS1
     {
         private Transform transform;
-        private Image image;
+        public Image weaponImage;
         private Image backgroundImage;
         private Image frameImage;
+
+
         private PlayerWeapons playerWeapons;
         private PlayerWeapons.WeaponType weaponType;
         private Material skillLockedMaterial;
@@ -168,7 +190,7 @@ public class UI_SkillTree : MonoBehaviour
             this.playerWeapons = playerWeapons;
             this.weaponType = weaponType;
             this.skillLockedMaterial = skillLockedMaterial;
-            image = transform.Find("Image").GetComponent<Image>();
+            weaponImage = transform.Find("Image").GetComponent<Image>();
             backgroundImage = transform.Find("Background").GetComponent<Image>();
             frameImage = transform.Find("Frame").GetComponent<Image>();
             transform.GetComponent<Button_UI>().ClickFunc = () =>
@@ -189,22 +211,24 @@ public class UI_SkillTree : MonoBehaviour
         {
             if (playerWeapons.IsWeaponUnlocked(weaponType))
             {
-                image.material = null;
+                weaponImage.material = null;
                 //success color
                 backgroundImage.color = new Color(0.088f, 0.264f, 0.092f, 1f);
                 frameImage.color = Color.yellow;
                 AudioManager.instance.PlaySFX("Upgrade");
+                UI_SkillTree.instance.weapon1.sprite = weaponImage.sprite;
             }
             else
             {
+
                 if (playerWeapons.CanUnlockMelee(weaponType))
                 {
-                    image.material = skillLockedMaterial;
+                    weaponImage.material = skillLockedMaterial;
                     backgroundImage.color = new Color(0.047f, 0.149f, 0.145f, 1f);
                 }
                 else
                 {
-                    image.material = skillLockedMaterial;
+                    weaponImage.material = skillLockedMaterial;
                     backgroundImage.color = Color.black;
                 }
             }
@@ -212,12 +236,13 @@ public class UI_SkillTree : MonoBehaviour
 
     }
 
-    private class WeaponBtnS2
+    public class WeaponBtnS2
     {
         private Transform transform;
-        private Image image;
+        public Image weaponImage;
         private Image backgroundImage;
         private Image frameImage;
+
         private PlayerWeapons playerWeapons;
         private PlayerWeapons.WeaponType weaponType;
         private Material skillLockedMaterial;
@@ -228,7 +253,7 @@ public class UI_SkillTree : MonoBehaviour
             this.playerWeapons = playerWeapons;
             this.weaponType = weaponType;
             this.skillLockedMaterial = skillLockedMaterial;
-            image = transform.Find("Image").GetComponent<Image>();
+            weaponImage = transform.Find("Image").GetComponent<Image>();
             backgroundImage = transform.Find("Background").GetComponent<Image>();
             frameImage = transform.Find("Frame").GetComponent<Image>();
             transform.GetComponent<Button_UI>().ClickFunc = () =>
@@ -249,27 +274,27 @@ public class UI_SkillTree : MonoBehaviour
         {
             if (playerWeapons.IsWeaponUnlocked(weaponType))
             {
-                image.material = null;
+                weaponImage.material = null;
                 //success color
                 backgroundImage.color = new Color(0.088f, 0.264f, 0.092f, 1f);
                 frameImage.color = Color.yellow;
                 AudioManager.instance.PlaySFX("Upgrade");
+                UI_SkillTree.instance.weapon2.sprite = weaponImage.sprite;
             }
             else
             {
                 if (playerWeapons.CanUnlockRange(weaponType))
                 {
-                    image.material = skillLockedMaterial;
+                    weaponImage.material = skillLockedMaterial;
                     backgroundImage.color = new Color(0.047f, 0.149f, 0.145f, 1f);
                 }
                 else
                 {
-                    image.material = skillLockedMaterial;
+                    weaponImage.material = skillLockedMaterial;
                     backgroundImage.color = Color.black;
                 }
             }
         }
-
     }
 
     [System.Serializable]

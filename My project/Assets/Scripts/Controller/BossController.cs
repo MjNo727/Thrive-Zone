@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-public class BossController : MonoBehaviour
+public class BossController : MonoBehaviour, IDataPersistance
 {
     private GameObject target;
     public GameObject victoryMenuUI;
@@ -45,8 +45,6 @@ public class BossController : MonoBehaviour
         playerLevel = target.GetComponent<PlayerController>();
 
         text.text = "Destronos\n<color=red>Level: " + enemyLevel;
-
-        currentHealth = maxHealth;
         healthbar.SetHealth(currentHealth, maxHealth);
         player = GameObject.FindWithTag("Player").transform;
         animator = GetComponent<Animator>();
@@ -76,6 +74,19 @@ public class BossController : MonoBehaviour
         {
             inRange = false;
             animator.SetBool("isInCheckRange", false);
+        }
+
+        if(transform.position.x < 28.43f){
+            transform.position = new Vector2(28.43f, transform.position.y);
+        }
+        if(transform.position.x > 60.9f){
+            transform.position = new Vector2(60.9f, transform.position.y);
+        }
+        if(transform.position.y < 1.29f){
+            transform.position = new Vector2(transform.position.x, 1.29f);
+        }
+        if(transform.position.y > 12.73f){
+            transform.position = new Vector2(transform.position.x, 12.73f);
         }
 
         if (Vector2.Distance(transform.position, player.position) <= attackRange)
@@ -134,6 +145,9 @@ public class BossController : MonoBehaviour
                 AudioManager.instance.PlayMusic("Boss");
                 detectSoundPlayed = true;
             }
+            moveSpeed = 5f;
+            followPlayerRange = 7f;
+            attackRange = 6f;
             bossDamage += 10f;
         }
         else if (currentHealth < 0.4 * maxHealth && currentHealth >= 0)
@@ -144,6 +158,9 @@ public class BossController : MonoBehaviour
                 AudioManager.instance.PlayMusic("Boss");
 
             }
+            moveSpeed = 10f;
+            followPlayerRange = 8f;
+            attackRange = 7f;
             bossDamage += 20f;
         }
     }
@@ -208,10 +225,22 @@ public class BossController : MonoBehaviour
         Time.timeScale = 0;
     }
 
-    void ShowDamage(string text){
-        if(floatingTextPrefab){
+    void ShowDamage(string text)
+    {
+        if (floatingTextPrefab)
+        {
             GameObject prefab = Instantiate(floatingTextPrefab, transform.position, Quaternion.identity);
             prefab.GetComponentInChildren<TextMesh>().text = text;
         }
+    }
+
+    public void LoadData(GameData data)
+    {
+        this.currentHealth = data.bossCurrentHealth;
+    }
+
+    public void SaveData(GameData data)
+    {
+        data.bossCurrentHealth = this.currentHealth;
     }
 }

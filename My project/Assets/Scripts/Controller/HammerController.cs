@@ -5,7 +5,7 @@ using UnityEngine;
 public class HammerController : MonoBehaviour
 {
     public Collider2D hammerCollider;
-    public float hammerDamage = 5f;
+    public float hammerDamage = 20f;
 
     public void AttackRight()
     {

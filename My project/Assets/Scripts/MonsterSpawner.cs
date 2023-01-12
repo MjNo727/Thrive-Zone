@@ -12,7 +12,7 @@ public class MonsterSpawner : MonoBehaviour
     void Start()
     {
         spawnAllowed = true;
-        InvokeRepeating("SpawnAMonster", 1f, 2f);
+        InvokeRepeating("SpawnAMonster", 0.5f, 2.5f);
     }
 
     void Update(){

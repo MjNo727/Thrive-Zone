@@ -157,4 +157,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1067bc589fc63204ab8dff649708167f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rifleDamage: 20
+  rifleDamage: 25

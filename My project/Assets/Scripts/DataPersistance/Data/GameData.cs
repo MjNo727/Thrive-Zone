@@ -11,8 +11,13 @@ public class GameData
     public float playerCurrentExp;
     public float playerRequiredExp;
     public int playerCurrentLevel;
-    public Vector2 playerCurrentPostion;
-    
+    public int playerUpgradePoints;
+    public Vector2 playerCurrentPosition;
+
+    public float bossCurrentHealth;
+
+    public float currentTimeOnTimer;
+
     public GameData()
     {
         this.playerCurrentHealth = 100f;
@@ -20,6 +25,11 @@ public class GameData
         this.playerCurrentExp = 0f;
         this.playerRequiredExp = 0f;
         this.playerCurrentLevel = 1;
-        playerCurrentPostion = new Vector2(-20.46f, 2.19f);
+        this.playerUpgradePoints = 0;
+        playerCurrentPosition = new Vector2(-20.46f, 2.19f);
+
+        this.bossCurrentHealth = 800f;
+
+        this.currentTimeOnTimer = 1200f;
     }
 }

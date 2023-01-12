@@ -22,12 +22,12 @@ public class PlayerController : MonoBehaviour, IDataPersistance
     public float dashDistance = 100f;
     [Header("Cooldown")]
     public float cooldownDashTime = 2f;
-    public float cooldownSwordTime = 1f;
-    public float cooldownHammerTime = 1f;
-    public float cooldownScytheTime = 0.5f;
-    public float cooldownGunTime = 1f;
+    public float cooldownSwordTime = 0.5f;
+    public float cooldownHammerTime = 0.5f;
+    public float cooldownScytheTime = 0.25f;
+    public float cooldownGunTime = 0.75f;
     public float cooldownRifleTime = 0.5f;
-    public float cooldownBowTime = 1.5f;
+    public float cooldownBowTime = 1.2f;
     float nextDash, nextFire1, nextFire2;
     private bool isDashing;
     [SerializeField]
@@ -36,7 +36,8 @@ public class PlayerController : MonoBehaviour, IDataPersistance
     private TextMeshProUGUI textCooldown1, textCooldown2;
     private bool isOnCooldown1 = false;
     private bool isOnCooldown2 = false;
-    private float cooldownTimer = 0;
+    private float cooldownTimer1 = 0;
+    private float cooldownTimer2 = 0;
 
     [Header("Healthbar")]
     public float maxHealth = 100f;
@@ -103,9 +104,11 @@ public class PlayerController : MonoBehaviour, IDataPersistance
         switch (e.weaponType)
         {
             case PlayerWeapons.WeaponType.Hammer:
+
                 canUseHammer = true;
                 break;
             case PlayerWeapons.WeaponType.Scythe:
+
                 canUseScythe = true;
                 break;
             case PlayerWeapons.WeaponType.Gun:
@@ -203,18 +206,22 @@ public class PlayerController : MonoBehaviour, IDataPersistance
         if (isOnCooldown1)
         {
             // user click spell while in use
+            AudioManager.instance.PlaySFX("Cooldown");
         }
         else
         {
             isOnCooldown1 = true;
             textCooldown1.gameObject.SetActive(true);
-            // textCooldown2.gameObject.SetActive(true);
-            cooldownTimer = cooldownSwordTime;
-            //cooldownTimer = cooldownHammerTime;
-            //cooldownTimer = cooldownScytheTime;
-            //cooldownTimer = cooldownGunTime;
-            //cooldownTimer = cooldownBowTime;
-            //cooldownTimer = cooldownRifleTime;
+            if (canUseScythe)
+            {
+                cooldownTimer1 = cooldownScytheTime;
+            }
+            else if(canUseHammer){
+                cooldownTimer1 = cooldownHammerTime;
+            }
+            else{
+                cooldownTimer1 = cooldownSwordTime;
+            }
         }
     }
 
@@ -223,64 +230,76 @@ public class PlayerController : MonoBehaviour, IDataPersistance
         if (isOnCooldown2)
         {
             // user click spell while in use
+            AudioManager.instance.PlaySFX("Cooldown");
         }
         else
         {
             isOnCooldown2 = true;
-            // textCooldown1.gameObject.SetActive(true);
             textCooldown2.gameObject.SetActive(true);
-            // cooldownTimer = cooldownSwordTime;
-            //cooldownTimer = cooldownHammerTime;
-            //cooldownTimer = cooldownScytheTime;
-            //cooldownTimer = cooldownGunTime;
-            cooldownTimer = cooldownBowTime;
-            //cooldownTimer = cooldownRifleTime;
+            if (canUseRifle)
+            {
+                cooldownTimer2 = cooldownRifleTime;
+            }
+            else if(canUseGun){
+                cooldownTimer2 = cooldownGunTime;
+            }
+            else{
+                cooldownTimer2 = cooldownBowTime;
+            }
         }
     }
 
     void ApplyCooldown1()
     {
-        cooldownTimer -= Time.deltaTime;
-        if (cooldownTimer < 0)
+        cooldownTimer1 -= Time.deltaTime;
+        if (cooldownTimer1 < 0)
         {
             isOnCooldown1 = false;
             textCooldown1.gameObject.SetActive(false);
-            // textCooldown2.gameObject.SetActive(false);
             imageCooldown1.fillAmount = 0f;
-            // imageCooldown2.fillAmount = 0f;
         }
         else
         {
-            textCooldown1.text = Mathf.RoundToInt(cooldownTimer).ToString();
-            imageCooldown1.fillAmount = cooldownTimer / cooldownSwordTime;
-            //imageCooldown1.fillAmount = cooldownTimer / cooldownHammerTime;
-            //imageCooldown1.fillAmount = cooldownTimer / cooldownScytheTime;
-            //imageCooldown1.fillAmount = cooldownTimer / cooldownGunTime;
-            //imageCooldown1.fillAmount = cooldownTimer / cooldownBowTime;
-            //imageCooldown1.fillAmount = cooldownTimer / cooldownRifleTime;
+            textCooldown1.text = Mathf.RoundToInt(cooldownTimer1).ToString();
+            if (canUseScythe)
+            {
+                imageCooldown1.fillAmount = cooldownTimer1 / cooldownScytheTime;
+            }
+            else if (canUseHammer)
+            {
+                imageCooldown1.fillAmount = cooldownTimer1 / cooldownHammerTime;
+            }
+            else
+            {
+                imageCooldown1.fillAmount = cooldownTimer1 / cooldownSwordTime;
+            }
         }
     }
 
     void ApplyCooldown2()
     {
-        cooldownTimer -= Time.deltaTime;
-        if (cooldownTimer < 0)
+        cooldownTimer2 -= Time.deltaTime;
+        if (cooldownTimer2 < 0)
         {
             isOnCooldown2 = false;
-            // textCooldown1.gameObject.SetActive(false);
             textCooldown2.gameObject.SetActive(false);
-            // imageCooldown1.fillAmount = 0f;
             imageCooldown2.fillAmount = 0f;
         }
         else
         {
-            textCooldown2.text = Mathf.RoundToInt(cooldownTimer).ToString();
-            //imageCooldown2.fillAmount = cooldownTimer / cooldownSwordTime;
-            //imageCooldown2.fillAmount = cooldownTimer / cooldownHammerTime;
-            //imageCooldown2.fillAmount = cooldownTimer / cooldownScytheTime;
-            //imageCooldown2.fillAmount = cooldownTimer / cooldownGunTime;
-            imageCooldown2.fillAmount = cooldownTimer / cooldownBowTime;
-            //imageCooldown2.fillAmount = cooldownTimer / cooldownRifleTime;
+            textCooldown2.text = Mathf.RoundToInt(cooldownTimer2).ToString();
+            if (canUseRifle)
+            {
+                imageCooldown2.fillAmount = cooldownTimer2 / cooldownRifleTime;
+            }
+            else if (canUseGun)
+            {
+                imageCooldown2.fillAmount = cooldownTimer2 / cooldownGunTime;
+            }
+            else
+            {
+                imageCooldown2.fillAmount = cooldownTimer2 / cooldownBowTime;
+            }
         }
     }
 
@@ -666,6 +685,10 @@ public class PlayerController : MonoBehaviour, IDataPersistance
             levelUp.Play();
             levelUpSplash.Play();
             level++;
+            if (level % 5 == 0)
+            {
+                playerWeapons.AddUpgradePoints();
+            }
             frontXpbar.fillAmount = 0f;
             backXpbar.fillAmount = 0f;
             currentXp = Mathf.RoundToInt(currentXp - requiredXp);
@@ -686,7 +709,7 @@ public class PlayerController : MonoBehaviour, IDataPersistance
     {
         this.currentHealth = data.playerCurrentHealth;
         this.maxHealth = data.playerMaxHealth;
-        this.transform.position = data.playerCurrentPostion;
+        this.transform.position = data.playerCurrentPosition;
         this.requiredXp = data.playerRequiredExp;
         this.currentXp = data.playerCurrentExp;
         this.level = data.playerCurrentLevel;
@@ -697,7 +720,7 @@ public class PlayerController : MonoBehaviour, IDataPersistance
         data.playerCurrentHealth = this.currentHealth;
         data.playerMaxHealth = this.maxHealth;
         data.playerCurrentExp = this.currentXp;
-        data.playerCurrentPostion = this.transform.position;
+        data.playerCurrentPosition = this.transform.position;
         data.playerCurrentLevel = this.level;
         data.playerRequiredExp = this.requiredXp;
     }

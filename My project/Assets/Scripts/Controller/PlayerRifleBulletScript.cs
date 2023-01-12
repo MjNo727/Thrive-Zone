@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerRifleBulletScript : MonoBehaviour
 {
     private Rigidbody2D rb;
-    public float rifleDamage = 20f;
+    public float rifleDamage = 25f;
 
     void Start()
     {

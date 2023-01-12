@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlayerWeapons
 {
+    public event EventHandler OnUpgradePointsChanged;
     public event EventHandler<OnWeaponUnlockedEventArgs> OnWeaponUnlocked;
     public class OnWeaponUnlockedEventArgs : EventArgs
     {
@@ -18,6 +19,18 @@ public class PlayerWeapons
         Bow,
         Gun,
         Rifle
+    }
+
+    private int upgradePoints;
+
+    public void AddUpgradePoints()
+    {
+        upgradePoints++;
+        OnUpgradePointsChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+    public int GetUpgradePoints(){
+        return upgradePoints;
     }
 
     private List<WeaponType> unlockedWeaponTypeList;
@@ -39,7 +52,8 @@ public class PlayerWeapons
         return unlockedWeaponTypeList.Contains(weaponType);
     }
 
-    public bool CanUnlockMelee(WeaponType weaponType){
+    public bool CanUnlockMelee(WeaponType weaponType)
+    {
         WeaponType weaponRequirement = GetWeaponRequirementMelee(weaponType);
         if (weaponRequirement != WeaponType.Sword)
         {
@@ -55,7 +69,8 @@ public class PlayerWeapons
         }
     }
 
-    public bool CanUnlockRange(WeaponType weaponType){
+    public bool CanUnlockRange(WeaponType weaponType)
+    {
         WeaponType weaponRequirement = GetWeaponRequirementRange(weaponType);
         if (weaponRequirement != WeaponType.Bow)
         {
@@ -93,18 +108,38 @@ public class PlayerWeapons
 
     public bool TryUnlockWeaponMelee(WeaponType weaponType)
     {
-        if(CanUnlockMelee(weaponType)){
-            UnlockWeapon(weaponType);
-            return true;
+        if (CanUnlockMelee(weaponType))
+        {
+            if (upgradePoints > 0)
+            {
+                upgradePoints--;
+                OnUpgradePointsChanged?.Invoke(this, EventArgs.Empty);
+                UnlockWeapon(weaponType);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         else return false;
     }
 
     public bool TryUnlockWeaponRange(WeaponType weaponType)
     {
-        if(CanUnlockRange(weaponType)){
-            UnlockWeapon(weaponType);
-            return true;
+        if (CanUnlockRange(weaponType))
+        {
+            if (upgradePoints > 0)
+            {
+                upgradePoints--;
+                OnUpgradePointsChanged?.Invoke(this, EventArgs.Empty);
+                UnlockWeapon(weaponType);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         else return false;
     }

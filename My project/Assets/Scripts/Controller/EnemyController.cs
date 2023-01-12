@@ -11,13 +11,8 @@ public class EnemyController : MonoBehaviour
     public float enemyXp;
     public float XpMultiplier;
     public TextMeshProUGUI text;
-    // public Transform target;
-    public float speed = 50f;
-    public float nextWaypointDistance = 3f;
-    public SpriteRenderer enemyGFX;
-    Path path;
+    public AIPath aIPath;
     int currentWaypoint = 0;
-    Seeker seeker;
     bool isDead = false;
 
     public Rigidbody2D rb;
@@ -53,58 +48,20 @@ public class EnemyController : MonoBehaviour
             text.text = "<color=green>Level: " + enemyLevel + "</color> \n XP: " + Mathf.Round(enemyXp * multiplier);
         }
 
-        seeker = GetComponent<Seeker>();
         rb = GetComponent<Rigidbody2D>();
-        InvokeRepeating("UpdatePath", 0f, 0.5f);
-        seeker.StartPath(rb.position, target.transform.position, OnPathComplete);
         currentHealth = maxHealth;
         animator = GetComponent<Animator>();
     }
 
-    void UpdatePath()
+    void Update()
     {
-        if (seeker.IsDone())
+        if (aIPath.desiredVelocity.x >= 0.01f)
         {
-            seeker.StartPath(rb.position, target.transform.position, OnPathComplete);
+            transform.localScale = new Vector3(1f, 1f, 1f);
         }
-    }
-
-    void FixedUpdate()
-    {
-        if (path == null) return;
-        if (currentWaypoint >= path.vectorPath.Count)
+        else if (aIPath.desiredVelocity.x <= -0.01f)
         {
-            return;
-        }
-
-        Vector2 direction = ((Vector2)path.vectorPath[currentWaypoint] - rb.position).normalized;
-        Vector2 force = direction * speed * Time.deltaTime;
-        float distance = Vector2.Distance(rb.position, path.vectorPath[currentWaypoint]);
-        if (distance < nextWaypointDistance)
-        {
-            currentWaypoint++;
-        }
-        if (force.x >= 0.01f)
-        {
-            enemyGFX.flipX = false;
-        }
-        else if (force.x <= -0.01f)
-        {
-            enemyGFX.flipX = true;
-        }
-        if (isDead)
-        {
-            force = Vector2.zero;
-        }
-        rb.AddForce(force);
-    }
-
-    void OnPathComplete(Path p)
-    {
-        if (!p.error)
-        {
-            path = p;
-            currentWaypoint = 0;
+            transform.localScale = new Vector3(-1f, 1f, 1f);
         }
     }
 
@@ -188,8 +145,10 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    void ShowDamage(string text){
-        if(floatingTextPrefab){
+    void ShowDamage(string text)
+    {
+        if (floatingTextPrefab)
+        {
             GameObject prefab = Instantiate(floatingTextPrefab, transform.position, Quaternion.identity);
             prefab.GetComponentInChildren<TextMesh>().text = text;
         }

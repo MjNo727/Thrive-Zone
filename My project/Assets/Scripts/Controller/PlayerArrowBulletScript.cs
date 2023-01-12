@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerArrowBulletScript : MonoBehaviour
 {
     private Rigidbody2D rb;
-    public float arrowDamage = 5f;
+    public float arrowDamage = 7f;
 
     void Start()
     {

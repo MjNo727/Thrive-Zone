@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: -7790457581814809894}
   - component: {fileID: -3538888792117649003}
   - component: {fileID: 8869750812686105495}
+  - component: {fileID: 7455405705995296292}
+  - component: {fileID: -3672187967591084529}
   m_Layer: 9
   m_Name: Lizard
   m_TagString: Enemy
@@ -154,13 +156,11 @@ MonoBehaviour:
   enemyXp: 0
   XpMultiplier: 1.2
   text: {fileID: 6772316375609635447}
-  speed: 150
-  nextWaypointDistance: 3
-  enemyGFX: {fileID: 2570816268036089439}
+  aIPath: {fileID: 7455405705995296292}
   rb: {fileID: -3538888792117649003}
   knockbackForce: 5
   knockbackForceUp: 1
-  maxHealth: 20
+  maxHealth: 10
   currentHealth: 0
   flashDuration: 0.1
   numOfFlashes: 4
@@ -229,6 +229,62 @@ PolygonCollider2D:
       - {x: 0.7331412, y: -0.21454974}
       - {x: 0.6901304, y: -0.08551747}
       - {x: 0.47507665, y: -0.04250672}
+--- !u!114 &7455405705995296292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6170184807263040110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6eb1402c17e84a9282a7f0f62eb584f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 5
+  radius: 0.5
+  height: 2
+  canMove: 1
+  maxSpeed: 2
+  gravity: {x: NaN, y: NaN, z: NaN}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  centerOffsetCompatibility: NaN
+  repathRateCompatibility: NaN
+  canSearchCompability: 0
+  orientation: 1
+  enableRotation: 0
+  autoRepath:
+    mode: 2
+    interval: 0.5
+    sensitivity: 10
+    maximumInterval: 2
+    visualizeSensitivity: 0
+  targetCompatibility: {fileID: 0}
+  maxAcceleration: -2.5
+  rotationSpeed: 360
+  slowdownDistance: 0.6
+  pickNextWaypointDist: 1.2
+  endReachedDistance: 0.2
+  alwaysDrawGizmos: 0
+  slowWhenNotFacingTarget: 1
+  whenCloseToDestination: 0
+  constrainInsideGraph: 0
+--- !u!114 &-3672187967591084529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6170184807263040110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9679e68a0f1144e79c664d9a11ca121, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1
+  target: {fileID: 0}
 --- !u!1 &6232033270882767780
 GameObject:
   m_ObjectHideFlags: 0

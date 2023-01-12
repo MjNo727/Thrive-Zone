@@ -5,7 +5,8 @@ using UnityEngine;
 public class ScytheController : MonoBehaviour
 {
     public Collider2D scytheCollider;
-    public float scytheDamage = 20f;
+    public Sprite scytheSprite;
+    public float scytheDamage = 40f;
 
     public void AttackRight()
     {
