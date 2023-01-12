@@ -6,7 +6,10 @@ using UnityEngine.UI;
 
 public class MainMenuController : MonoBehaviour
 {
-    [SerializeField] private Button newGameBtn;
+    
+    [SerializeField] private Button mapGameBtn;
+    [SerializeField] private Button mapGame2Btn;
+    [SerializeField] private Button mapGame3Btn;
     [SerializeField] private Button loadGameBtn;
     public FadeAnimator fadeAnimator;
     private void Start(){
@@ -23,18 +26,42 @@ public class MainMenuController : MonoBehaviour
             loadGameBtn.interactable = false;
         }
     }
-    public void OnNewGameClicked()
+    public void OnMapGameClicked()
     {
         DataPersistanceManager.instance.NewGame();
+        
+        DataPersistanceManager.instance.scene = "GameplayScene";
         DataPersistanceManager.instance.SaveGame();
         // SceneManager.LoadSceneAsync("GameplayScene");
         fadeAnimator.FadeToScreen("GameplayScene");
     }
 
+        public void OnMapGame2Clicked()
+    {
+        DataPersistanceManager.instance.NewGame();
+        
+        DataPersistanceManager.instance.scene = "GameplayScene2";
+        DataPersistanceManager.instance.SaveGame();
+        // SceneManager.LoadSceneAsync("GameplayScene");
+        fadeAnimator.FadeToScreen("GameplayScene2");
+        
+    }
+
+    public void OnMapGame3Clicked()
+    {
+        DataPersistanceManager.instance.NewGame();
+        
+        DataPersistanceManager.instance.scene = "GameplayScene";
+        DataPersistanceManager.instance.SaveGame();
+        // SceneManager.LoadSceneAsync("GameplayScene");
+        fadeAnimator.FadeToScreen("GameplayScene");
+        
+    }
+
     public void OnLoadGameClicked()
     {
         DataPersistanceManager.instance.SaveGame();
-        SceneManager.LoadSceneAsync("GameplayScene");
+        SceneManager.LoadSceneAsync(DataPersistanceManager.instance.scene);
     }
 
     public void OnQuitGameClicked(){
