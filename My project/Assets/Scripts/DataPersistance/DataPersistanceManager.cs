@@ -8,6 +8,7 @@ public class DataPersistanceManager : MonoBehaviour
 {
     [SerializeField] private bool initializeDataIfNull = false;
     [SerializeField] private string fileName;
+    public string scene;
     public bool isNewGame = false;
     private GameData gameData;
     private List<IDataPersistance> dataPersistanceObjects;
