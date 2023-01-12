@@ -158,37 +158,6 @@ public class PlayerController : MonoBehaviour, IDataPersistance
         return playerWeapons;
     }
 
-    //====================Check weapon available===============================
-    // public bool canUseSword()
-    // {
-    //     return playerWeapons.IsWeaponUnlocked(PlayerWeapons.WeaponType.Sword);
-    // }
-
-    // public bool canUseHammer()
-    // {
-    //     return playerWeapons.IsWeaponUnlocked(PlayerWeapons.WeaponType.Hammer);
-    // }
-
-    // public bool canUseScythe()
-    // {
-    //     return playerWeapons.IsWeaponUnlocked(PlayerWeapons.WeaponType.Scythe);
-    // }
-
-    // public bool canUseBow()
-    // {
-    //     return playerWeapons.IsWeaponUnlocked(PlayerWeapons.WeaponType.Bow);
-    // }
-
-    // public bool canUseGun()
-    // {
-    //     return playerWeapons.IsWeaponUnlocked(PlayerWeapons.WeaponType.Gun);
-    // }
-
-    // public bool canUseRifle()
-    // {
-    //     return playerWeapons.IsWeaponUnlocked(PlayerWeapons.WeaponType.Rifle);
-    // }
-
     //=========================================================================
     private void FixedUpdate()
     {

@@ -9,8 +9,15 @@ public class UI_SkillTree : MonoBehaviour
 {
     [SerializeField]
     private Material skillLockedMaterial;
+    [SerializeField]
+    private WeaponUnlockPath[] weaponUnlockPathArray;
+    [SerializeField]
+    private WeaponUnlockPath2[] weaponUnlockPathArray2;
+    [SerializeField] private Sprite lineSprite;
+    [SerializeField] private Sprite lineSpriteGlow;
     private PlayerWeapons playerWeapons;
-    private List<WeaponBtnS1> weaponBtnList1;
+    private List<WeaponBtnS1> weaponBtnListS1;
+    private List<WeaponBtnS2> weaponBtnListS2;
     public PlayerInputActions playerInput;
     public InputAction openSkillTree;
     private CanvasGroup canvasGroup;
@@ -38,63 +45,25 @@ public class UI_SkillTree : MonoBehaviour
         Tooltip.AddTooltip(transform.Find("Weapon2_0"), "Bow (Base Attack = 5)");
         Tooltip.AddTooltip(transform.Find("Weapon2_1"), "Gun (Base Attack = 10)");
         Tooltip.AddTooltip(transform.Find("Weapon2_2"), "Rifle (Base Attack = 20)");
-
-        transform.Find("Weapon1_0").GetComponent<Button_UI>().ClickFunc = () =>
-        {
-            Tooltip_Warning.ShowTooltip_Static("Already obtained!");
-            AudioManager.instance.PlaySFX("UpgradeFail");
-        };
-        transform.Find("Weapon1_1").GetComponent<Button_UI>().ClickFunc = () =>
-        {
-            if (!playerWeapons.TryUnlockWeaponMelee(PlayerWeapons.WeaponType.Hammer))
-            {
-                Tooltip_Warning.ShowTooltip_Static("Cannot upgrade!");
-                AudioManager.instance.PlaySFX("UpgradeFail");
-            }
-        };
-        transform.Find("Weapon1_2").GetComponent<Button_UI>().ClickFunc = () =>
-        {
-            if (!playerWeapons.TryUnlockWeaponMelee(PlayerWeapons.WeaponType.Scythe))
-            {
-                Tooltip_Warning.ShowTooltip_Static("Cannot upgrade!");
-                AudioManager.instance.PlaySFX("UpgradeFail");
-            }
-        };
-        transform.Find("Weapon2_0").GetComponent<Button_UI>().ClickFunc = () =>
-        {
-            Tooltip_Warning.ShowTooltip_Static("Already obtained!");
-            AudioManager.instance.PlaySFX("UpgradeFail");
-        };
-        transform.Find("Weapon2_1").GetComponent<Button_UI>().ClickFunc = () =>
-        {
-            if (!playerWeapons.TryUnlockWeaponRange(PlayerWeapons.WeaponType.Gun))
-            {
-                Tooltip_Warning.ShowTooltip_Static("Cannot upgrade!");
-                AudioManager.instance.PlaySFX("UpgradeFail");
-            }
-        };
-        transform.Find("Weapon2_2").GetComponent<Button_UI>().ClickFunc = () =>
-        {
-            if (!playerWeapons.TryUnlockWeaponRange(PlayerWeapons.WeaponType.Rifle))
-            {
-                Tooltip_Warning.ShowTooltip_Static("Cannot upgrade!");
-                AudioManager.instance.PlaySFX("UpgradeFail");
-            }
-        };
     }
     public void SetPlayerWeapons(PlayerWeapons playerWeapons)
     {
         this.playerWeapons = playerWeapons;
-        weaponBtnList1 = new List<WeaponBtnS1>();
-        weaponBtnList1.Add(new WeaponBtnS1(transform.Find("Weapon1_1"), playerWeapons, PlayerWeapons.WeaponType.Hammer, skillLockedMaterial));
-        weaponBtnList1.Add(new WeaponBtnS1(transform.Find("Weapon1_2"), playerWeapons, PlayerWeapons.WeaponType.Scythe, skillLockedMaterial));
+        weaponBtnListS1 = new List<WeaponBtnS1>();
+        weaponBtnListS2 = new List<WeaponBtnS2>();
+        weaponBtnListS1.Add(new WeaponBtnS1(transform.Find("Weapon1_1"), playerWeapons, PlayerWeapons.WeaponType.Hammer, skillLockedMaterial));
+        weaponBtnListS1.Add(new WeaponBtnS1(transform.Find("Weapon1_2"), playerWeapons, PlayerWeapons.WeaponType.Scythe, skillLockedMaterial));
+        weaponBtnListS2.Add(new WeaponBtnS2(transform.Find("Weapon2_1"), playerWeapons, PlayerWeapons.WeaponType.Gun, skillLockedMaterial));
+        weaponBtnListS2.Add(new WeaponBtnS2(transform.Find("Weapon2_2"), playerWeapons, PlayerWeapons.WeaponType.Rifle, skillLockedMaterial));
         playerWeapons.OnWeaponUnlocked += PlayerWeapons_OnWeaponUnlocked;
-        UpdateVisuals();
+        UpdateVisualsS1();
+        UpdateVisualsS2();
     }
 
     private void PlayerWeapons_OnWeaponUnlocked(object sender, PlayerWeapons.OnWeaponUnlockedEventArgs e)
     {
-        UpdateVisuals();
+        UpdateVisualsS1();
+        UpdateVisualsS2();
     }
 
     private void WeaponTree(InputAction.CallbackContext context)
@@ -123,11 +92,63 @@ public class UI_SkillTree : MonoBehaviour
         isOpened = false;
     }
 
-    private void UpdateVisuals()
+    private void UpdateVisualsS1()
     {
-        foreach (WeaponBtnS1 weaponBtnS1 in weaponBtnList1)
+        foreach (WeaponBtnS1 weaponBtn in weaponBtnListS1)
         {
-            weaponBtnS1.UpdateVisual();
+            weaponBtn.UpdateVisualS1();
+        }
+
+        // Darken all links
+        foreach (WeaponUnlockPath weaponUnlockPath in weaponUnlockPathArray)
+        {
+            foreach (Image linkImage in weaponUnlockPath.linkImageArray)
+            {
+                linkImage.color = new Color(.5f, .5f, .5f);
+                linkImage.sprite = lineSprite;
+            }
+        }
+
+        foreach (WeaponUnlockPath weaponUnlockPath in weaponUnlockPathArray)
+        {
+            if (playerWeapons.IsWeaponUnlocked(weaponUnlockPath.weaponType) || playerWeapons.CanUnlockMelee(weaponUnlockPath.weaponType))
+            {
+                foreach (Image linkImage in weaponUnlockPath.linkImageArray)
+                {
+                    linkImage.color = Color.white;
+                    linkImage.sprite = lineSpriteGlow;
+                }
+            }
+        }
+    }
+
+    private void UpdateVisualsS2()
+    {
+        foreach (WeaponBtnS2 weaponBtn in weaponBtnListS2)
+        {
+            weaponBtn.UpdateVisualS2();
+        }
+
+        // Darken all links
+        foreach (WeaponUnlockPath2 weaponUnlockPath in weaponUnlockPathArray2)
+        {
+            foreach (Image linkImage in weaponUnlockPath.linkImageArray)
+            {
+                linkImage.color = new Color(.5f, .5f, .5f);
+                linkImage.sprite = lineSprite;
+            }
+        }
+
+        foreach (WeaponUnlockPath2 weaponUnlockPath in weaponUnlockPathArray2)
+        {
+            if (playerWeapons.IsWeaponUnlocked(weaponUnlockPath.weaponType) || playerWeapons.CanUnlockRange(weaponUnlockPath.weaponType))
+            {
+                foreach (Image linkImage in weaponUnlockPath.linkImageArray)
+                {
+                    linkImage.color = Color.white;
+                    linkImage.sprite = lineSpriteGlow;
+                }
+            }
         }
     }
 
@@ -136,6 +157,7 @@ public class UI_SkillTree : MonoBehaviour
         private Transform transform;
         private Image image;
         private Image backgroundImage;
+        private Image frameImage;
         private PlayerWeapons playerWeapons;
         private PlayerWeapons.WeaponType weaponType;
         private Material skillLockedMaterial;
@@ -148,6 +170,7 @@ public class UI_SkillTree : MonoBehaviour
             this.skillLockedMaterial = skillLockedMaterial;
             image = transform.Find("Image").GetComponent<Image>();
             backgroundImage = transform.Find("Background").GetComponent<Image>();
+            frameImage = transform.Find("Frame").GetComponent<Image>();
             transform.GetComponent<Button_UI>().ClickFunc = () =>
             {
                 if (!playerWeapons.IsWeaponUnlocked(weaponType))
@@ -156,24 +179,27 @@ public class UI_SkillTree : MonoBehaviour
                     if (!playerWeapons.TryUnlockWeaponMelee(weaponType))
                     {
                         Tooltip_Warning.ShowTooltip_Static("Cannot unlock " + weaponType + "!");
+                        AudioManager.instance.PlaySFX("UpgradeFail");
                     }
                 }
             };
         }
 
-        public void UpdateVisual()
+        public void UpdateVisualS1()
         {
             if (playerWeapons.IsWeaponUnlocked(weaponType))
             {
                 image.material = null;
                 //success color
                 backgroundImage.color = new Color(0.088f, 0.264f, 0.092f, 1f);
+                frameImage.color = Color.yellow;
                 AudioManager.instance.PlaySFX("Upgrade");
             }
             else
             {
                 if (playerWeapons.CanUnlockMelee(weaponType))
                 {
+                    image.material = skillLockedMaterial;
                     backgroundImage.color = new Color(0.047f, 0.149f, 0.145f, 1f);
                 }
                 else
@@ -183,6 +209,80 @@ public class UI_SkillTree : MonoBehaviour
                 }
             }
         }
+
     }
 
+    private class WeaponBtnS2
+    {
+        private Transform transform;
+        private Image image;
+        private Image backgroundImage;
+        private Image frameImage;
+        private PlayerWeapons playerWeapons;
+        private PlayerWeapons.WeaponType weaponType;
+        private Material skillLockedMaterial;
+
+        public WeaponBtnS2(Transform transform, PlayerWeapons playerWeapons, PlayerWeapons.WeaponType weaponType, Material skillLockedMaterial)
+        {
+            this.transform = transform;
+            this.playerWeapons = playerWeapons;
+            this.weaponType = weaponType;
+            this.skillLockedMaterial = skillLockedMaterial;
+            image = transform.Find("Image").GetComponent<Image>();
+            backgroundImage = transform.Find("Background").GetComponent<Image>();
+            frameImage = transform.Find("Frame").GetComponent<Image>();
+            transform.GetComponent<Button_UI>().ClickFunc = () =>
+            {
+                if (!playerWeapons.IsWeaponUnlocked(weaponType))
+                {
+                    // Skill not yet unlocked
+                    if (!playerWeapons.TryUnlockWeaponRange(weaponType))
+                    {
+                        Tooltip_Warning.ShowTooltip_Static("Cannot unlock " + weaponType + "!");
+                        AudioManager.instance.PlaySFX("UpgradeFail");
+                    }
+                }
+            };
+        }
+
+        public void UpdateVisualS2()
+        {
+            if (playerWeapons.IsWeaponUnlocked(weaponType))
+            {
+                image.material = null;
+                //success color
+                backgroundImage.color = new Color(0.088f, 0.264f, 0.092f, 1f);
+                frameImage.color = Color.yellow;
+                AudioManager.instance.PlaySFX("Upgrade");
+            }
+            else
+            {
+                if (playerWeapons.CanUnlockRange(weaponType))
+                {
+                    image.material = skillLockedMaterial;
+                    backgroundImage.color = new Color(0.047f, 0.149f, 0.145f, 1f);
+                }
+                else
+                {
+                    image.material = skillLockedMaterial;
+                    backgroundImage.color = Color.black;
+                }
+            }
+        }
+
+    }
+
+    [System.Serializable]
+    public class WeaponUnlockPath
+    {
+        public PlayerWeapons.WeaponType weaponType;
+        public Image[] linkImageArray;
+    }
+
+    [System.Serializable]
+    public class WeaponUnlockPath2
+    {
+        public PlayerWeapons.WeaponType weaponType;
+        public Image[] linkImageArray;
+    }
 }
