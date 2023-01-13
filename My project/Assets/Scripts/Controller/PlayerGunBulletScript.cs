@@ -26,6 +26,6 @@ public class PlayerGunBulletScript : MonoBehaviour
             boss.takeDamage(gunDamage);
             Destroy(gameObject);
         }
-        Destroy(gameObject, 1f);
+        Destroy(gameObject, 0.7f);
     }
 }

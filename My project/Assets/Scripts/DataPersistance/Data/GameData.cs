@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 [System.Serializable]
 public class GameData
 {
+    public string sceneName;
     public float playerCurrentHealth;
     public float playerMaxHealth;
     public float playerCurrentExp;
@@ -20,6 +21,7 @@ public class GameData
 
     public GameData()
     {
+        this.sceneName = "GameplayScene1";
         this.playerCurrentHealth = 100f;
         this.playerMaxHealth = 100f;
         this.playerCurrentExp = 0f;

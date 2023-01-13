@@ -686,7 +686,7 @@ public class PlayerController : MonoBehaviour, IDataPersistance
             levelUp.Play();
             levelUpSplash.Play();
             level++;
-            if (level % 5 == 0)
+            if (level % 3 == 0)
             {
                 playerWeapons.AddUpgradePoints();
             }
