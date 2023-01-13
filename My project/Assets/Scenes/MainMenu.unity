@@ -3051,7 +3051,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1517908782}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: 
+        m_MethodName: SetActive
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4173,7 +4173,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: QUIT
+  m_text: BACK
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e7079bf0d4ebcc544a686b61d963413f, type: 2}
   m_sharedMaterial: {fileID: -4229274081739393622, guid: e7079bf0d4ebcc544a686b61d963413f,
@@ -4701,9 +4701,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4a0c81ab2e6395469de764ed95feb94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapGameBtn: {fileID: 0}
-  mapGame2Btn: {fileID: 0}
-  mapGame3Btn: {fileID: 0}
+  mapGameBtn: {fileID: 1269463233}
+  mapGame2Btn: {fileID: 1065183584}
+  mapGame3Btn: {fileID: 2008739290}
   loadGameBtn: {fileID: 325629626}
   fadeAnimator: {fileID: 1139974516}
 --- !u!1 &1592911271
@@ -6680,7 +6680,7 @@ MonoBehaviour:
   mapGameBtn: {fileID: 1269463233}
   mapGame2Btn: {fileID: 1065183584}
   mapGame3Btn: {fileID: 2008739290}
-  loadGameBtn: {fileID: 0}
+  loadGameBtn: {fileID: 325629626}
   fadeAnimator: {fileID: 1139974516}
 --- !u!1001 &6866738401402670923
 PrefabInstance:

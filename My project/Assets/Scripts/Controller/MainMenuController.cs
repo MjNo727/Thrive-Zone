@@ -51,10 +51,10 @@ public class MainMenuController : MonoBehaviour
     {
         DataPersistanceManager.instance.NewGame();
         
-        DataPersistanceManager.instance.scene = "GameplayScene";
+        DataPersistanceManager.instance.scene = "GameplayScene3";
         DataPersistanceManager.instance.SaveGame();
         // SceneManager.LoadSceneAsync("GameplayScene");
-        fadeAnimator.FadeToScreen("GameplayScene");
+        fadeAnimator.FadeToScreen("GameplayScene3");
         
     }
 
