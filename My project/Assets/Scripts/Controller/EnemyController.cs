@@ -12,12 +12,9 @@ public class EnemyController : MonoBehaviour
     public float XpMultiplier;
     public TextMeshProUGUI text;
     public AIPath aIPath;
-    int currentWaypoint = 0;
-    bool isDead = false;
-
     public Rigidbody2D rb;
-    public float knockbackForce = 10f;
-    public float knockbackForceUp = 2f;
+    public float knockbackForce = 20f;
+    public float knockbackForceUp = 1f;
     public float maxHealth = 50f;
     public float currentHealth;
     public float flashDuration;
@@ -57,11 +54,11 @@ public class EnemyController : MonoBehaviour
     {
         if (aIPath.desiredVelocity.x >= 0.01f)
         {
-            transform.localScale = new Vector3(1f, 1f, 1f);
+            sr.flipX = false;
         }
         else if (aIPath.desiredVelocity.x <= -0.01f)
         {
-            transform.localScale = new Vector3(-1f, 1f, 1f);
+            sr.flipX = true;
         }
     }
 
@@ -70,24 +67,12 @@ public class EnemyController : MonoBehaviour
         ShowDamage(damage.ToString());
         currentHealth -= damage;
         animator.SetTrigger("Hit");
-        Knockback();
+        StartCoroutine(Knockback());
         StartCoroutine(FlashCo());
         if (currentHealth <= 0)
         {
-            isDead = true;
             Dead();
         }
-        else
-        {
-            isDead = false;
-        }
-    }
-
-    void Knockback()
-    {
-        Transform attacker = GetClosestDamageSource();
-        Vector2 knockbackDirection = new Vector2(transform.position.x - attacker.transform.position.x, 0);
-        rb.velocity = new Vector2(knockbackDirection.x, knockbackForceUp) * knockbackForce;
     }
 
     public Transform GetClosestDamageSource()
@@ -152,5 +137,14 @@ public class EnemyController : MonoBehaviour
             GameObject prefab = Instantiate(floatingTextPrefab, transform.position, Quaternion.identity);
             prefab.GetComponentInChildren<TextMesh>().text = text;
         }
+    }
+
+    private IEnumerator Knockback(){
+        aIPath.enabled = false;
+        Transform attacker = GetClosestDamageSource();
+        Vector2 knockbackDirection = new Vector2(transform.position.x - attacker.transform.position.x, 0);
+        rb.velocity = new Vector2(knockbackDirection.x, knockbackForceUp) * knockbackForce;
+        yield return new WaitForSeconds(0.3f);
+        aIPath.enabled = true;
     }
 }

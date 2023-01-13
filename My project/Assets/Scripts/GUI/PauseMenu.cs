@@ -57,15 +57,24 @@ public class PauseMenu : MonoBehaviour
         isPaused = false;
     }
 
-    public void CallMainMenu(){
+    public void CallMainMenu()
+    {
         Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
         isPaused = false;
     }
 
-        public void CallMainMenu2(){
+    public void CallMainMenu2()
+    {
         Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 2);
+        isPaused = false;
+    }
+
+    public void CallMainMenu3()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 3);
         isPaused = false;
     }
 
@@ -75,7 +84,8 @@ public class PauseMenu : MonoBehaviour
         Application.Quit();
     }
 
-    public void SaveGame(){
+    public void SaveGame()
+    {
         DataPersistanceManager.instance.SaveGame();
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour, IDataPersistance
 {
@@ -717,10 +718,12 @@ public class PlayerController : MonoBehaviour, IDataPersistance
 
     public void SaveData(GameData data)
     {
+        Scene currentScene = SceneManager.GetActiveScene();
+        data.sceneName = currentScene.name;
         data.playerCurrentHealth = this.currentHealth;
         data.playerMaxHealth = this.maxHealth;
         data.playerCurrentExp = this.currentXp;
-        data.playerCurrentPosition = this.transform.position;
+        data.playerCurrentPosition = new Vector2(-20.46f, 2.19f);
         data.playerCurrentLevel = this.level;
         data.playerRequiredExp = this.requiredXp;
     }

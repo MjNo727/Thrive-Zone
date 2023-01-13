@@ -24,6 +24,6 @@ public class PlayerArrowBulletScript : MonoBehaviour
             boss.takeDamage(arrowDamage);
             Destroy(gameObject);
         }
-        Destroy(gameObject, 1.5f);
+        Destroy(gameObject, 0.5f);
     }
 }

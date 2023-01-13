@@ -88,8 +88,10 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
-    public void OnWeaponTree(InputAction.CallbackContext context){
-        if(context.performed){
+    public void OnWeaponTree(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
             isOpen = true;
         }
     }
@@ -101,6 +103,8 @@ public class TutorialManager : MonoBehaviour
 
         dialogBox2.SetActive(true);
         yield return new WaitForSeconds(5.5f);
+
+        Timer.instance.StartTimer();
 
         for (int i = 0; i < popUps.Length; i++)
         {
@@ -141,14 +145,15 @@ public class TutorialManager : MonoBehaviour
                 popUpIndex++;
             }
         }
-        else if(popUpIndex == 4){
-            if(isOpen){
+        else if (popUpIndex == 4)
+        {
+            if (isOpen)
+            {
                 popUpIndex++;
             }
         }
         else
         {
-            Timer.instance.StartTimer();
             spawner.SetActive(true);
         }
     }
