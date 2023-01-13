@@ -30,7 +30,7 @@ public class GameData
         this.playerUpgradePoints = 0;
         playerCurrentPosition = new Vector2(-20.46f, 2.19f);
 
-        this.bossCurrentHealth = 800f;
+        this.bossCurrentHealth = 200f;
 
         this.currentTimeOnTimer = 1200f;
     }

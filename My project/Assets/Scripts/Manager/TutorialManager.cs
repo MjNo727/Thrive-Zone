@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+using UnityEngine.SceneManagement;
 public class TutorialManager : MonoBehaviour
 {
     private PlayerInputActions inputActions;
@@ -12,9 +12,10 @@ public class TutorialManager : MonoBehaviour
     public GameObject[] popUps;
     private int popUpIndex;
     public GameObject spawner;
-
+    
     void Start()
     {
+        
         inputActions = new PlayerInputActions();
         inputActions.Player.Enable();
         inputActions.UI.Enable();
@@ -25,6 +26,7 @@ public class TutorialManager : MonoBehaviour
         inputActions.Player.Fire1.performed += OnFire1;
         inputActions.Player.Fire2.performed += OnFire2;
         inputActions.UI.WeaponTree.performed += OnWeaponTree;
+        
     }
 
     public void Update()
@@ -98,6 +100,9 @@ public class TutorialManager : MonoBehaviour
 
     IEnumerator TutorialPopup()
     {
+        Scene x = SceneManager.GetActiveScene();
+        if (x.name != "GameplayScene3")
+        {
         dialogBox.SetActive(true);
         yield return new WaitForSeconds(5.5f);
 
@@ -105,6 +110,8 @@ public class TutorialManager : MonoBehaviour
         yield return new WaitForSeconds(5.5f);
 
         Timer.instance.StartTimer();
+        }
+        
 
         for (int i = 0; i < popUps.Length; i++)
         {

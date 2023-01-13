@@ -3249,7 +3249,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 173726121}
         m_TargetAssemblyTypeName: VictoryMenu, Assembly-CSharp
-        m_MethodName: CallMainMenu
+        m_MethodName: CallMainMenu2
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -90847,7 +90847,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 173726121}
         m_TargetAssemblyTypeName: VictoryMenu, Assembly-CSharp
-        m_MethodName: CallMainMenu
+        m_MethodName: CallMainMenu2
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -91468,6 +91468,11 @@ PrefabInstance:
       propertyPath: frontXpbar
       value: 
       objectReference: {fileID: 1286267661}
+    - target: {fileID: 2402930360276349908, guid: e758294a8c49e8f468639c8058d9c09a,
+        type: 3}
+      propertyPath: gameOverUI
+      value: 
+      objectReference: {fileID: 598834551}
     - target: {fileID: 2402930360276349908, guid: e758294a8c49e8f468639c8058d9c09a,
         type: 3}
       propertyPath: healthText

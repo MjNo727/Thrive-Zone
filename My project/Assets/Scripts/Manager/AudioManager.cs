@@ -17,6 +17,7 @@ public class AudioManager : MonoBehaviour
             return;
         }
         instance = this;
+        //DontDestroyOnLoad(this.gameObject);
     }
 
     public void PlayMusic(string name)
@@ -71,4 +72,5 @@ public class AudioManager : MonoBehaviour
             sfxSource.PlayOneShot(s.clip, volumeScale);
         }
     }
+
 }

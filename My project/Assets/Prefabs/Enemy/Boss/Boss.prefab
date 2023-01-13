@@ -849,6 +849,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b4c65178e3b5be45a64677bed926362, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  victoryMenuUI: {fileID: 0}
   text: {fileID: 7960256965306470730}
   healthbar: {fileID: 836922897}
   healthBarUI: {fileID: 836922895}
@@ -857,8 +858,9 @@ MonoBehaviour:
   gun: {fileID: 5368600285010970270}
   BulletProjectile: {fileID: 5613834097978123842, guid: 2f67d8e2fba1fb540ab91fd81cae0679,
     type: 3}
+  floatingTextPrefab: {fileID: 0}
   enemyLevel: 20
-  maxHealth: 1000
+  maxHealth: 200
   currentHealth: 0
   moveSpeed: 3
   bossDamage: 5
